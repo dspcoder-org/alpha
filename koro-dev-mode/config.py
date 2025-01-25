@@ -1,0 +1,1 @@
+path_to_save_result = "./test_output/"
