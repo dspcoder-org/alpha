@@ -313,6 +313,7 @@ class Koro:
             try:
                 # Use communicate with timeout
                 stdout, stderr = process.communicate(input=input_str, timeout=timeout_secs)
+                # process.stdin.close()
                 execution_time = time() - start_time
                 output = stdout.strip()
                 err = stderr.strip() if stderr else None

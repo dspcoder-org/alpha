@@ -1,16 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#define VERIFY(cond)   \
-    if (!(cond)) {             \
-        printf("._bad_input"); \
-        exit(0);               \
-    }                            \
-
-// Content of util.h
-
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 
 struct Linked_List {
@@ -22,9 +11,8 @@ struct Linked_List {
 extern struct Linked_List* setup_question();
 extern void print_LinkedList(struct Linked_List* head);
 
-// end of util.h
 
-struct Linked_List* buildLinkedList(int arr[], int n){
+struct Linked_List* buildLinkedList(int arr[], int n, int pos){
     
     struct Linked_List* head = (struct Linked_List* ) malloc(sizeof(struct Linked_List));
 
@@ -40,6 +28,18 @@ struct Linked_List* buildLinkedList(int arr[], int n){
             dummy_head->next = (struct Linked_List* ) malloc(sizeof(struct Linked_List));
             dummy_head = dummy_head->next; 
         }
+    }
+
+    if (pos != -1) {
+        struct Linked_List* tail = head;
+        while (tail->next != NULL) {
+            tail = tail->next;
+        }
+        struct Linked_List* node = head;
+        for (int i = 0; i < pos; i++) {
+            node = node->next;
+        }
+        tail->next = node;
     }
 
     return head; 
@@ -63,23 +63,21 @@ void print_LinkedList(struct Linked_List* head){
 }
 
 struct Linked_List* setup_question(){
-    int n, temp;
+    int n, pos;
     
-    // Input the number of elements
-    VERIFY(((scanf("%d", &n)) > 0)); ;
+    // Input the number of elements and cycle position
+    scanf("%d %d", &n, &pos);
 
     // Create an array to store the node values
     int nodes[n];
 
     // Input the values into the array
     for (int i = 0; i < n; i++) {
-        VERIFY(((scanf("%d", &nodes[i])) > 0));
+        scanf("%d", &nodes[i]);
     }
 
-    VERIFY(((scanf("%d", &temp)) == EOF));
-
     // Build the linked list
-    struct Linked_List* head =  buildLinkedList(nodes, n); 
+    struct Linked_List* head =  buildLinkedList(nodes, n, pos); 
 
     return head;
 }

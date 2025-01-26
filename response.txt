@@ -14,20 +14,22 @@ struct Linked_List {
 extern struct Linked_List* setup_question();
 extern void print_LinkedList(struct Linked_List* head);
 
-struct Linked_List* buildLinkedList(int arr[], int n, int pos) {
-    struct Linked_List* head = (struct Linked_List*)malloc(sizeof(struct Linked_List));
 
-    if (n == 0) {
-        return NULL;
+struct Linked_List* buildLinkedList(int arr[], int n, int pos){
+    
+    struct Linked_List* head = (struct Linked_List* ) malloc(sizeof(struct Linked_List));
+
+    if(n == 0){
+        return NULL; 
     }
 
-    struct Linked_List* dummy_head = head;
-
-    for (int i = 0; i < n; i++) {
-        dummy_head->data = arr[i];
-        if (i != n - 1) {
-            dummy_head->next = (struct Linked_List*)malloc(sizeof(struct Linked_List));
-            dummy_head = dummy_head->next;
+    struct Linked_List* dummy_head = head; 
+    
+    for(int i = 0; i < n ; i++){
+        dummy_head->data = arr[i]; 
+        if (i != n-1){
+            dummy_head->next = (struct Linked_List* ) malloc(sizeof(struct Linked_List));
+            dummy_head = dummy_head->next; 
         }
     }
 
@@ -36,35 +38,37 @@ struct Linked_List* buildLinkedList(int arr[], int n, int pos) {
         while (tail->next != NULL) {
             tail = tail->next;
         }
-        struct Linked_List* node_at_pos = head;
+        struct Linked_List* node = head;
         for (int i = 0; i < pos; i++) {
-            node_at_pos = node_at_pos->next;
+            node = node->next;
         }
-        tail->next = node_at_pos;
+        tail->next = node;
     }
 
-    return head;
+    return head; 
+
 }
 
-void print_LinkedList(struct Linked_List* head) {
-    if (head == NULL) {
-        printf("");
+void print_LinkedList(struct Linked_List* head){
+
+    if(head == NULL){
+        printf(""); 
     }
 
-    while (head) {
-        printf("%d", head->data);
-        if (head->next) {
-            printf(" ");
+    while(head){
+        printf("%d", head->data); 
+        if(head->next){    
+            printf(" "); 
         }
         head = head->next;
     }
-    printf("\n");
+    printf("\n"); 
 }
 
-struct Linked_List* setup_question() {
+struct Linked_List* setup_question(){
     int n, pos;
-
-    // Input the number of elements and position
+    
+    // Input the number of elements and cycle position
     scanf("%d %d", &n, &pos);
 
     // Create an array to store the node values
@@ -76,7 +80,7 @@ struct Linked_List* setup_question() {
     }
 
     // Build the linked list
-    struct Linked_List* head = buildLinkedList(nodes, n, pos);
+    struct Linked_List* head =  buildLinkedList(nodes, n, pos); 
 
     return head;
 }
@@ -85,21 +89,22 @@ struct Linked_List* setup_question() {
 <main.c>
 #include "../inc/util.h"
 
-bool has_cycle(struct Linked_List* head) {
+bool detect_cycle(struct Linked_List* head) {
     // Write your code here
     
 }
 
-int main() {
+int main(){
+
     // Setup the linked list
     struct Linked_List* head = setup_question();
-
-    // User function to check for cycle in the linked list
-    bool result = has_cycle(head);
+    
+    // User function to detect cycle in the linked list
+    bool has_cycle = detect_cycle(head); 
 
     // Print the result
-    printf("%s\n", result ? "true" : "false");
-
+    printf(has_cycle ? "true\n" : "false\n");
+    
     return 0;
 }
 </main.c>
@@ -118,36 +123,33 @@ struct Linked_List {
 extern struct Linked_List* setup_question();
 extern void print_LinkedList(struct Linked_List* head);
 
-bool has_cycle(struct Linked_List* head) {
+bool detect_cycle(struct Linked_List* head) {
     // Write your code here
-    if (head == NULL || head->next == NULL) {
-        return false;
-    }
+    struct Linked_List* slow = head;  // Slow pointer
+    struct Linked_List* fast = head;  // Fast pointer
 
-    struct Linked_List* slow = head;
-    struct Linked_List* fast = head->next;
-
-    while (slow != fast) {
-        if (fast == NULL || fast->next == NULL) {
-            return false;
-        }
+    while (fast != NULL && fast->next != NULL) {
         slow = slow->next;
         fast = fast->next->next;
+        if (slow == fast) {
+            return true;  // Cycle detected
+        }
     }
 
-    return true;
+    return false;  // No cycle found
 }
 
-int main() {
+int main(){
+
     // Setup the linked list
     struct Linked_List* head = setup_question();
-
-    // User function to check for cycle in the linked list
-    bool result = has_cycle(head);
+    
+    // User function to detect cycle in the linked list
+    bool has_cycle = detect_cycle(head); 
 
     // Print the result
-    printf("%s\n", result ? "true" : "false");
-
+    printf(has_cycle ? "true\n" : "false\n");
+    
     return 0;
 }
 </main_dev.c>
@@ -189,6 +191,8 @@ public:
 LinkedList* setup_question();
 void print_LinkedList(LinkedList* head);
 
+
+
 // Function to build a linked list from an array
 LinkedList* buildLinkedList(int arr[], int n, int pos) {
     if (n == 0) {
@@ -208,11 +212,11 @@ LinkedList* buildLinkedList(int arr[], int n, int pos) {
         while (tail->next != nullptr) {
             tail = tail->next;
         }
-        LinkedList* node_at_pos = head;
+        LinkedList* node = head;
         for (int i = 0; i < pos; ++i) {
-            node_at_pos = node_at_pos->next;
+            node = node->next;
         }
-        tail->next = node_at_pos;
+        tail->next = node;
     }
 
     return head;
@@ -235,7 +239,8 @@ void print_LinkedList(LinkedList* head) {
 }
 
 LinkedList* setup_question() {
-    // Input the number of elements and position
+    
+    // Input the number of elements and cycle position
     int n, pos;
     std::cin >> n >> pos;
 
@@ -259,20 +264,21 @@ LinkedList* setup_question() {
 #include <vector>
 #include <iostream>
 
-bool has_cycle(LinkedList* head) {
+bool detect_cycle(LinkedList* head) {
     // Write your code here
     
 }
 
 int main() {
+    
     // Setup the linked list
     LinkedList* head = setup_question();
 
-    // Call the user function to check for cycle in the linked list
-    bool result = has_cycle(head);
+    // Call the user function to detect cycle in the linked list
+    bool has_cycle = detect_cycle(head);
 
     // Print the result
-    std::cout << (result ? "true" : "false") << std::endl;
+    std::cout << (has_cycle ? "true" : "false") << std::endl;
 
     return 0;
 }
@@ -281,6 +287,7 @@ int main() {
 <main_dev.cpp>
 #include <vector>
 #include <iostream>
+
 
 class LinkedList {
 public:
@@ -295,35 +302,32 @@ public:
 LinkedList* setup_question();
 void print_LinkedList(LinkedList* head);
 
-bool has_cycle(LinkedList* head) {
+bool detect_cycle(LinkedList* head) {
     // Write your code here
-    if (head == nullptr || head->next == nullptr) {
-        return false;
-    }
+    LinkedList* slow = head;  // Slow pointer
+    LinkedList* fast = head;  // Fast pointer
 
-    LinkedList* slow = head;
-    LinkedList* fast = head->next;
-
-    while (slow != fast) {
-        if (fast == nullptr || fast->next == nullptr) {
-            return false;
-        }
+    while (fast != nullptr && fast->next != nullptr) {
         slow = slow->next;
         fast = fast->next->next;
+        if (slow == fast) {
+            return true;  // Cycle detected
+        }
     }
 
-    return true;
+    return false;  // No cycle found
 }
 
 int main() {
+    
     // Setup the linked list
     LinkedList* head = setup_question();
 
-    // Call the user function to check for cycle in the linked list
-    bool result = has_cycle(head);
+    // Call the user function to detect cycle in the linked list
+    bool has_cycle = detect_cycle(head);
 
     // Print the result
-    std::cout << (result ? "true" : "false") << std::endl;
+    std::cout << (has_cycle ? "true" : "false") << std::endl;
 
     return 0;
 }
@@ -376,8 +380,7 @@ The input consists of two lines. The first line contains two space-separated int
 true
 ```
 
-**Explanation:**
-The linked list has a cycle because the last node (4) points back to the node at index 1 (value 2).
+**Explanation:** The linked list has a cycle because the last node (4) points back to the node at index 1 (value 2).
 
 ---
 
@@ -394,8 +397,7 @@ The linked list has a cycle because the last node (4) points back to the node at
 true
 ```
 
-**Explanation:**
-The last node (value 2) links back to the head node, forming a cycle.
+**Explanation:** The last node (value 2) links back to the head node, forming a cycle.
 
 ---
 
@@ -412,8 +414,7 @@ The last node (value 2) links back to the head node, forming a cycle.
 false
 ```
 
-**Explanation:**
-The linked list does not have a cycle, as there is no node linking back to a previous node.
+**Explanation:** The linked list does not have a cycle, as there is no node linking back to a previous node.
 
 ---
 
@@ -421,7 +422,6 @@ The linked list does not have a cycle, as there is no node linking back to a pre
 
 - The number of nodes in the list is in the range [0, 10⁴].
 - -10⁵ ≤ Node.val ≤ 10⁵
-
 </readme.md>
 
 <solution.md>
@@ -431,97 +431,80 @@ The linked list does not have a cycle, as there is no node linking back to a pre
 <test.py>
 class testCases:
     def __init__(self, koro_exe) -> None:
-        self.RUN = 10
+        self.RUN = 3
         self.exe = koro_exe
         self.default_timeout_window = 10
         self.usage = 'prod'
         
     def test_case_1(self, timeout_window = 5, override = 0):
-        # Normal case: cycle exists
-        input_lines = [
-            "4 1",
-            "1 2 3 4"
-        ]
+        # Normal case: cycle present
+        input_str = "4 1\n1 2 3 4\n"
         expected_value = "true"
-        return input_lines, expected_value
+        return input_str, expected_value
 
     def test_case_2(self, timeout_window = 5, override = 0):
         # Normal case: no cycle
-        input_lines = [
-            "5 -1",
-            "3 -3 4 0 2"
-        ]
+        input_str = "5 -1\n1 2 3 4 5\n"
         expected_value = "false"
-        return input_lines, expected_value
+        return input_str, expected_value
 
     def test_case_3(self, timeout_window = 5, override = 0):
-        # Edge case: empty list
-        input_lines = [
-            "0 -1"
-        ]
-        expected_value = "false"
-        return input_lines, expected_value
+        # Edge case: single node with cycle
+        input_str = "1 0\n1\n"
+        expected_value = "true"
+        return input_str, expected_value
 
     def test_case_4(self, timeout_window = 5, override = 0):
-        # Edge case: single node with self-loop
-        input_lines = [
-            "1 0",
-            "1"
-        ]
-        expected_value = "true"
-        return input_lines, expected_value
+        # Edge case: single node without cycle
+        input_str = "1 -1\n1\n"
+        expected_value = "false"
+        return input_str, expected_value
 
     def test_case_5(self, timeout_window = 5, override = 0):
-        # Edge case: single node without self-loop
-        input_lines = [
-            "1 -1",
-            "1"
-        ]
+        # Edge case: empty list
+        input_str = "0 -1\n"
         expected_value = "false"
-        return input_lines, expected_value
+        return input_str, expected_value
 
     def test_case_6(self, timeout_window = 5, override = 0):
-        # Case with negative numbers
-        input_lines = [
-            "4 2",
-            "-9999 -7777 -5555 -3333"
-        ]
+        # Case: cycle at the head
+        input_str = "3 0\n1 2 3\n"
         expected_value = "true"
-        return input_lines, expected_value
+        return input_str, expected_value
 
     def test_case_7(self, timeout_window = 5, override = 0):
-        # Case with mixed positive and negative numbers
-        input_lines = [
-            "7 4",
-            "-10000 0 5555 -9999 2222 -1111 10000"
-        ]
+        # Case: cycle at the tail
+        input_str = "4 3\n1 2 3 4\n"
         expected_value = "true"
-        return input_lines, expected_value
+        return input_str, expected_value
 
     def test_case_8(self, timeout_window = 5, override = 0):
-        # Case with repeated numbers
-        input_lines = [
-            "6 3",
-            "9999 9999 -9999 -9999 0 0"
-        ]
+        # Case: cycle at the middle
+        input_str = "5 2\n1 2 3 4 5\n"
         expected_value = "true"
-        return input_lines, expected_value
+        return input_str, expected_value
 
     def test_case_9(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
-        # Large list (10000 elements)
-        input_lines = [
-            "10000 5000",
-            " ".join(map(str, range(-5000, 5000)))
-        ]
+        # Large list (10000 nodes) with cycle
+        n = 10000
+        pos = 5000
+        nodes = list(range(1, n + 1))
+        input_str = f"{n} {pos}\n" + " ".join(map(str, nodes)) + "\n"
         expected_value = "true"
-        return input_lines, expected_value
+        return input_str, expected_value
 
-    def test_case_10(self, timeout_window = 5, override = 0):
-        # List with alternating max and min values
-        input_lines = [
-            "10 -1",
-            "10000 -10000 10000 -10000 10000 -10000 10000 -10000 10000 -10000"
-        ]
+    def test_case_10(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
+        # Large list (10000 nodes) without cycle
+        n = 10000
+        pos = -1
+        nodes = list(range(1, n + 1))
+        input_str = f"{n} {pos}\n" + " ".join(map(str, nodes)) + "\n"
         expected_value = "false"
-        return input_lines, expected_value
+        return input_str, expected_value
 </test.py>
+
+The generated code files maintain the same overall structure as the original files, with modifications to implement the new algorithm for detecting a cycle in a linked list. The majority of the code remains the same, including imports, class definitions, and helper functions. Only the algorithm-specific parts have been modified.
+
+The `readme.md` file has been updated with the problem description, input format, and examples specific to the cycle detection algorithm. The `solution.md` file is left empty as requested.
+
+The `test.py` file has been updated with 10 test cases covering various scenarios, including normal cases, edge cases, and large inputs. The `self.RUN` variable is set to 3 as specified.

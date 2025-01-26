@@ -23,7 +23,7 @@ class alpha:
                             6. If the new algorithm requires additional helper functions or slight modifications to existing functions, implement them in a way that minimizes changes to the overall structure.
                             7. readme.md : try to keep similar structure here problem description, basic examples, constraints
                             8. solution.md : keep this file empty 
-                            9. test.py : I want you make testing more aggresive. Make 20 test cases testing every edge case atleast with 3 times. if needed add more test cases. self.RUN will always be 3
+                            9. test.py : I want you make testing more aggresive. Make 10 test cases testing every edge. self.RUN will always be 3
                             
                             Remember, it's crucial to keep the structure and majority of the code as similar as possible to the original files. Only modify the parts directly related to implementing the new algorithm.
 
@@ -68,17 +68,17 @@ class alpha:
                             Common files 
                             
                             <readme.md>
-                            [Generated code for util.h]
+                            [Generated code for readme.md]
                             </readme.md>
                             
                             <solution.md>
-                            [Generated code for util.h]
+                            [Generated code for solution.md]
                             </solution.md>
                             
                             Test file
                             
                             <test.py>
-                            [Generated code for util.h]
+                            [Generated code for test.py]
                             </test.py>
 
                             Ensure that each file contains the complete code, including any necessary imports, class definitions, and functions from the original files, with only the algorithm-specific parts modified to implement the new algorithm.
@@ -215,7 +215,7 @@ class alpha:
         
         # Make the API call
         response = self.anthropic.messages.create(
-            model="claude-3-opus-20240229",
+            model="claude-3-opus-20240229",  # Latest model
             max_tokens=4096,
             messages=[
                 {
@@ -224,7 +224,8 @@ class alpha:
                 }
             ]
         )
-        return response.content[0].text
+        out = response.content[0].text
+        return out
     
     def generate_question_files(self, ques_name, ques_description, question_folder_name, base_path):
         
