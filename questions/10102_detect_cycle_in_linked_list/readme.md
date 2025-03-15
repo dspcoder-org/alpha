@@ -2,10 +2,6 @@
 
 Given the head of a singly linked list, write a function to detect if the linked list contains a cycle. If a cycle is present, return true; otherwise, return false.
 
-## Input format
-
-The input consists of two lines. The first line contains two space-separated integers n and pos, where n is the number of nodes in the linked list and pos is the index (0-indexed) of the node where the tail connects to. The second line contains n space-separated integers, the values of the nodes in the linked list.
-
 ## Examples
 
 ### Example 1:
@@ -21,9 +17,8 @@ The input consists of two lines. The first line contains two space-separated int
 true
 ```
 
-**Explanation:** The linked list has a cycle because the last node (4) points back to the node at index 1 (value 2).
-
----
+**Explanation:**
+The linked list has a cycle because the last node (4) points back to the node at index 1 (value 2).
 
 ### Example 2:
 
@@ -38,9 +33,8 @@ true
 true
 ```
 
-**Explanation:** The last node (value 2) links back to the head node, forming a cycle.
-
----
+**Explanation:**
+The last node (value 2) links back to the head node, forming a cycle.
 
 ### Example 3:
 
@@ -55,11 +49,10 @@ true
 false
 ```
 
-**Explanation:** The linked list does not have a cycle, as there is no node linking back to a previous node.
+**Explanation:**
+The linked list does not have a cycle, as there is no node linking back to a previous node.
 
----
+## Constraints:
 
-## Constraints
-
-- The number of nodes in the list is in the range [0, 10⁴].
-- -10⁵ ≤ Node.val ≤ 10⁵
+1. The number of nodes in the list is in the range `[0, 10,000]`.
+2. Each node's value satisfies `-100,000 ≤ Node.val ≤ 100,000`.

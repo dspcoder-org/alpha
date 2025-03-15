@@ -1,0 +1,37 @@
+Problem Description
+    Given the head of a singly linked list, write a function to reverse the linked list.The function should return the new head of the reversed linked list.
+
+Input Format:
+    The input consists of two lines:
+    The first line contains an integer n, the number of nodes in the linked list.
+    The second line contains n space-separated integers, representing the values of the nodes in the linked list.
+
+Examples
+
+    Example 1:
+    Input:
+        5
+        1 2 3 4 5
+    Output:
+        5 4 3 2 1
+    Explanation:The original linked list is 1 → 2 → 3 → 4 → 5. After reversing, it becomes 5 → 4 → 3 → 2 → 1.
+
+    Example 2:
+    Input:
+        3
+        10 20 30
+    Output:
+        30 20 10
+    Explanation:The original linked list 10 → 20 → 30 is reversed to 30 → 20 → 10.
+
+    Example 3:
+    Input:
+        1
+        42
+    Output:
+        42
+    Explanation:A single-node linked list remains unchanged after reversal.
+
+Constraints:
+    The number of nodes in the list is in the range [0, 10⁴].
+    -10⁵ ≤ Node.val ≤ 10⁵.

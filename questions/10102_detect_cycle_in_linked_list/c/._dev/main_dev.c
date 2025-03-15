@@ -8,35 +8,34 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question();
+extern struct Linked_List* setup_question(int argc, char* argv[]);
 extern void print_LinkedList(struct Linked_List* head);
 
 bool detect_cycle(struct Linked_List* head) {
-    // Write your code here
-    struct Linked_List* slow = head;  // Slow pointer
-    struct Linked_List* fast = head;  // Fast pointer
+    struct Linked_List* slow = head;
+    struct Linked_List* fast = head;
 
     while (fast != NULL && fast->next != NULL) {
         slow = slow->next;
         fast = fast->next->next;
+
         if (slow == fast) {
-            return true;  // Cycle detected
+            return true;
         }
     }
-
-    return false;  // No cycle found
+    return false;
 }
 
-int main(){
+int main(int argc, char* argv[]) {
 
     // Setup the linked list
-    struct Linked_List* head = setup_question();
+    struct Linked_List* head = setup_question(argc, argv);
     
     // User function to detect cycle in the linked list
     bool has_cycle = detect_cycle(head); 
 
     // Print the result
-    printf(has_cycle ? "true\n" : "false\n");
+    printf("%s\n", has_cycle ? "true" : "false");
     
     return 0;
 }

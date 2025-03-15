@@ -1,0 +1,3 @@
+[submodule "problems-azure"]
+	path = problems-azure
+	url = https://github.com/dspcoder-org/problems-azure.git

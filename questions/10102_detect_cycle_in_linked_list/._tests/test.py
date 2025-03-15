@@ -7,66 +7,180 @@ class testCases:
         
     def test_case_1(self, timeout_window = 5, override = 0):
         # Normal case: cycle present
-        input_str = "4 1\n1 2 3 4\n"
-        expected_value = "true"
-        return input_str, expected_value
+        no_of_input_args = 4
+        pos = 1
+        input = [1, 2, 3, 4]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_2(self, timeout_window = 5, override = 0):
-        # Normal case: no cycle
-        input_str = "5 -1\n1 2 3 4 5\n"
-        expected_value = "false"
-        return input_str, expected_value
+        # Normal case: cycle present at head
+        no_of_input_args = 5
+        pos = 0
+        input = [3, -3, 4, 0, 2]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_3(self, timeout_window = 5, override = 0):
-        # Edge case: single node with cycle
-        input_str = "1 0\n1\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Edge case: no cycle
+        no_of_input_args = 3
+        pos = -1
+        input = [2, 0, 1]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
 
     def test_case_4(self, timeout_window = 5, override = 0):
-        # Edge case: single node without cycle
-        input_str = "1 -1\n1\n"
-        expected_value = "false"
-        return input_str, expected_value
+        # Edge case: single element, no cycle
+        no_of_input_args = 1
+        pos = -1
+        input = [42]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
 
     def test_case_5(self, timeout_window = 5, override = 0):
-        # Edge case: empty list
-        input_str = "0 -1\n"
-        expected_value = "false"
-        return input_str, expected_value
+        # Edge case: single element, cycle to itself
+        no_of_input_args = 1
+        pos = 0
+        input = [42]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_6(self, timeout_window = 5, override = 0):
-        # Case: cycle at the head
-        input_str = "3 0\n1 2 3\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Case with negative numbers, cycle present
+        no_of_input_args = 4
+        pos = 2
+        input = [-9999, -7777, -5555, -3333]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_7(self, timeout_window = 5, override = 0):
-        # Case: cycle at the tail
-        input_str = "4 3\n1 2 3 4\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Case with mixed positive and negative numbers, no cycle
+        no_of_input_args = 7
+        pos = -1
+        input = [-10000, 0, 5555, -9999, 2222, -1111, 10000]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
 
     def test_case_8(self, timeout_window = 5, override = 0):
-        # Case: cycle at the middle
-        input_str = "5 2\n1 2 3 4 5\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Case with repeated numbers, cycle present
+        no_of_input_args = 6
+        pos = 3
+        input = [9999, 9999, -9999, -9999, 0, 0]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_9(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
-        # Large list (10000 nodes) with cycle
-        n = 10000
-        pos = 5000
-        nodes = list(range(1, n + 1))
-        input_str = f"{n} {pos}\n" + " ".join(map(str, nodes)) + "\n"
-        expected_value = "true"
-        return input_str, expected_value
-
-    def test_case_10(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
-        # Large list (10000 nodes) without cycle
-        n = 10000
+        # Large list (10000 elements), no cycle
+        no_of_input_args = 10000
         pos = -1
-        nodes = list(range(1, n + 1))
-        input_str = f"{n} {pos}\n" + " ".join(map(str, nodes)) + "\n"
-        expected_value = "false"
-        return input_str, expected_value
+        input = list(range(-5000, 5000))
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_10(self, timeout_window = 5, override = 0):
+        # List with alternating max and min values, cycle present
+        no_of_input_args = 10
+        pos = 5
+        input = [10000, -10000] * 5
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_11(self, timeout_window = 5, override = 0):
+        # List with all elements the same, no cycle
+        no_of_input_args = 5
+        pos = -1
+        input = [7, 7, 7, 7, 7]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_12(self, timeout_window = 5, override = 0):
+        # List with increasing sequence, cycle present
+        no_of_input_args = 5
+        pos = 2
+        input = [1, 2, 3, 4, 5]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_13(self, timeout_window = 5, override = 0):
+        # List with decreasing sequence, no cycle
+        no_of_input_args = 5
+        pos = -1
+        input = [5, 4, 3, 2, 1]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_14(self, timeout_window = 5, override = 0):
+        # List with alternating positive and negative numbers, cycle present
+        no_of_input_args = 6
+        pos = 1
+        input = [-1, 1, -2, 2, -3, 3]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_15(self, timeout_window = 5, override = 0):
+        # List with zeros, no cycle
+        no_of_input_args = 4
+        pos = -1
+        input = [0, 0, 0, 0]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_16(self, timeout_window = 5, override = 0):
+        # List with large positive numbers, cycle present
+        no_of_input_args = 3
+        pos = 1
+        input = [99999, 88888, 77777]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_17(self, timeout_window = 5, override = 0):
+        # List with large negative numbers, no cycle
+        no_of_input_args = 3
+        pos = -1
+        input = [-99999, -88888, -77777]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_18(self, timeout_window = 5, override = 0):
+        # List with alternating large positive and negative numbers, cycle present
+        no_of_input_args = 4
+        pos = 0
+        input = [99999, -99999, 88888, -88888]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_19(self, timeout_window = 5, override = 0):
+        # List with a mix of small and large numbers, no cycle
+        no_of_input_args = 5
+        pos = -1
+        input = [1, 10000, -1, -10000, 0]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_20(self, timeout_window = 5, override = 0):
+        # List with a single large number, cycle to itself
+        no_of_input_args = 1
+        pos = 0
+        input = [100000]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value

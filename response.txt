@@ -1,6 +1,16 @@
-Here are the generated code files based on the original files, implementing the new algorithm for detecting a cycle in a linked list:
-
 <lib.c>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define VERIFY(cond)   \
+    if (!(cond)) {             \
+        printf("._bad_input"); \
+        exit(0);               \
+    }
+
+// Content of util.h
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -11,11 +21,12 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question();
+extern struct Linked_List* setup_question(int argc, char* argv[]);
 extern void print_LinkedList(struct Linked_List* head);
 
+// end of util.h
 
-struct Linked_List* buildLinkedList(int arr[], int n, int pos){
+struct Linked_List* buildLinkedList(int arr[], int n){
     
     struct Linked_List* head = (struct Linked_List* ) malloc(sizeof(struct Linked_List));
 
@@ -31,18 +42,6 @@ struct Linked_List* buildLinkedList(int arr[], int n, int pos){
             dummy_head->next = (struct Linked_List* ) malloc(sizeof(struct Linked_List));
             dummy_head = dummy_head->next; 
         }
-    }
-
-    if (pos != -1) {
-        struct Linked_List* tail = head;
-        while (tail->next != NULL) {
-            tail = tail->next;
-        }
-        struct Linked_List* node = head;
-        for (int i = 0; i < pos; i++) {
-            node = node->next;
-        }
-        tail->next = node;
     }
 
     return head; 
@@ -65,45 +64,62 @@ void print_LinkedList(struct Linked_List* head){
     printf("\n"); 
 }
 
-struct Linked_List* setup_question(){
-    int n, pos;
-    
-    // Input the number of elements and cycle position
-    scanf("%d %d", &n, &pos);
+struct Linked_List* setup_question(int argc, char* argv[]) {
 
-    // Create an array to store the node values
-    int nodes[n];
+    if (argc == 1) {
+        int n, temp;
+        
+        // Input the number of elements
+        VERIFY(((scanf("%d", &n)) > 0));
 
-    // Input the values into the array
-    for (int i = 0; i < n; i++) {
-        scanf("%d", &nodes[i]);
+        // Create an array to store the node values
+        int nodes[n];
+
+        // Input the values into the array
+        for (int i = 0; i < n; i++) {
+            VERIFY(((scanf("%d", &nodes[i])) > 0));
+        }
+
+        VERIFY(((scanf("%d", &temp)) == EOF));
+
+        // Build the linked list
+        struct Linked_List* head =  buildLinkedList(nodes, n); 
+
+        return head;
+    } else {
+        int n = atoi(argv[1]);
+        int nodes[n];
+
+        for (int i = 0; i < n; i++) {
+            nodes[i] = atoi(argv[i+2]);
+        }
+
+        // Build the linked list
+        struct Linked_List* head =  buildLinkedList(nodes, n);
+
+        return head;
     }
-
-    // Build the linked list
-    struct Linked_List* head =  buildLinkedList(nodes, n, pos); 
-
-    return head;
 }
 </lib.c>
 
 <main.c>
-#include "../inc/util.h"
+#include "util.h"
+#include <stdbool.h>
 
-bool detect_cycle(struct Linked_List* head) {
+bool is_palindrome(struct Linked_List* head) {
     // Write your code here
-    
 }
 
-int main(){
+int main(int argc, char* argv[]) {
 
     // Setup the linked list
-    struct Linked_List* head = setup_question();
+    struct Linked_List* head = setup_question(argc, argv);
     
-    // User function to detect cycle in the linked list
-    bool has_cycle = detect_cycle(head); 
+    // User function to check if the linked list is a palindrome
+    bool result = is_palindrome(head); 
 
     // Print the result
-    printf(has_cycle ? "true\n" : "false\n");
+    printf(result ? "true\n" : "false\n");
     
     return 0;
 }
@@ -120,35 +136,53 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question();
+extern struct Linked_List* setup_question(int argc, char* argv[]);
 extern void print_LinkedList(struct Linked_List* head);
 
-bool detect_cycle(struct Linked_List* head) {
-    // Write your code here
-    struct Linked_List* slow = head;  // Slow pointer
-    struct Linked_List* fast = head;  // Fast pointer
+bool is_palindrome(struct Linked_List* head) {
+    if (!head || !head->next) return true;
 
-    while (fast != NULL && fast->next != NULL) {
-        slow = slow->next;
+    struct Linked_List* slow = head;
+    struct Linked_List* fast = head;
+    struct Linked_List* prev = NULL;
+    struct Linked_List* temp;
+
+    // Find the middle of the linked list
+    while (fast && fast->next) {
         fast = fast->next->next;
-        if (slow == fast) {
-            return true;  // Cycle detected
-        }
+        temp = slow;
+        slow = slow->next;
+        temp->next = prev;
+        prev = temp;
     }
 
-    return false;  // No cycle found
+    // If the number of nodes is odd, skip the middle node
+    if (fast) {
+        slow = slow->next;
+    }
+
+    // Compare the two halves
+    while (prev && slow) {
+        if (prev->data != slow->data) {
+            return false;
+        }
+        prev = prev->next;
+        slow = slow->next;
+    }
+
+    return true;
 }
 
-int main(){
+int main(int argc, char* argv[]) {
 
     // Setup the linked list
-    struct Linked_List* head = setup_question();
+    struct Linked_List* head = setup_question(argc, argv);
     
-    // User function to detect cycle in the linked list
-    bool has_cycle = detect_cycle(head); 
+    // User function to check if the linked list is a palindrome
+    bool result = is_palindrome(head); 
 
     // Print the result
-    printf(has_cycle ? "true\n" : "false\n");
+    printf(result ? "true\n" : "false\n");
     
     return 0;
 }
@@ -168,7 +202,7 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question();
+extern struct Linked_List* setup_question(int argc, char* argv[]);
 extern void print_LinkedList(struct Linked_List* head);
 
 #endif // UTIL_H
@@ -178,6 +212,13 @@ extern void print_LinkedList(struct Linked_List* head);
 #include <iostream>
 #include <vector>
 
+#define VERIFY(cond)   \
+    if (!(cond)) {             \
+        std::cout << "._bad_input\n"; \
+        exit(0);               \
+    }
+
+// Copy content of util.hpp
 class LinkedList {
 public:
     int data;
@@ -188,13 +229,11 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question();
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
 
-
-
 // Function to build a linked list from an array
-LinkedList* buildLinkedList(int arr[], int n, int pos) {
+LinkedList* buildLinkedList(int arr[], int n) {
     if (n == 0) {
         return nullptr;
     }
@@ -205,18 +244,6 @@ LinkedList* buildLinkedList(int arr[], int n, int pos) {
     for (int i = 1; i < n; ++i) {
         dummy_head->next = new LinkedList(arr[i]);
         dummy_head = dummy_head->next;
-    }
-
-    if (pos != -1) {
-        LinkedList* tail = head;
-        while (tail->next != nullptr) {
-            tail = tail->next;
-        }
-        LinkedList* node = head;
-        for (int i = 0; i < pos; ++i) {
-            node = node->next;
-        }
-        tail->next = node;
     }
 
     return head;
@@ -238,47 +265,62 @@ void print_LinkedList(LinkedList* head) {
     std::cout << std::endl;
 }
 
-LinkedList* setup_question() {
-    
-    // Input the number of elements and cycle position
-    int n, pos;
-    std::cin >> n >> pos;
+LinkedList* setup_question(int argc, char* argv[]) {
 
-    // Dynamically allocate an array to store the node values
-    int* nodes = new int[n];
+    if (argc == 1) {
+        // Input the number of elements
+        int n, temp;
+        // Input the number of elements
+        VERIFY((std::cin >> n));
 
-    // Input the values into the array
-    for (int i = 0; i < n; i++) {
-        std::cin >> nodes[i];
+        // Dynamically allocate an array to store the node values
+        int* nodes = new int[n];
+
+        // Input the values into the array
+        for (int i = 0; i < n; i++) {
+            VERIFY((std::cin >> nodes[i]));
+        }
+        // Check if there are any extra inputs
+        // If there are, then the input is invalid
+        VERIFY((std::cin >> temp).fail() == true);
+
+        // Build the linked list
+        LinkedList* head = buildLinkedList(nodes, n);
+
+        return head;
     }
+    else {
+        int n = std::stoi(argv[1]);
+        int* nodes = new int[n];
+        for (int i = 0; i < n; i++) {
+            nodes[i] = std::stoi(argv[i + 2]);
+        }
+        LinkedList* head = buildLinkedList(nodes, n);
 
-    // Build the linked list
-    LinkedList* head = buildLinkedList(nodes, n, pos);
-
-    return head;
+        return head;
+    }
 }
 </lib.cpp>
 
 <main.cpp>
-#include "../inc/util.hpp"
+#include "util.hpp"
 #include <vector>
 #include <iostream>
 
-bool detect_cycle(LinkedList* head) {
+bool is_palindrome(LinkedList* head) {
     // Write your code here
-    
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     
     // Setup the linked list
-    LinkedList* head = setup_question();
+    LinkedList* head = setup_question(argc, argv);
 
-    // Call the user function to detect cycle in the linked list
-    bool has_cycle = detect_cycle(head);
+    // Call the user function to check if the linked list is a palindrome
+    bool result = is_palindrome(head);
 
     // Print the result
-    std::cout << (has_cycle ? "true" : "false") << std::endl;
+    std::cout << (result ? "true" : "false") << std::endl;
 
     return 0;
 }
@@ -287,7 +329,6 @@ int main() {
 <main_dev.cpp>
 #include <vector>
 #include <iostream>
-
 
 class LinkedList {
 public:
@@ -299,35 +340,53 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question();
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
 
-bool detect_cycle(LinkedList* head) {
-    // Write your code here
-    LinkedList* slow = head;  // Slow pointer
-    LinkedList* fast = head;  // Fast pointer
+bool is_palindrome(LinkedList* head) {
+    if (!head || !head->next) return true;
 
-    while (fast != nullptr && fast->next != nullptr) {
-        slow = slow->next;
+    LinkedList* slow = head;
+    LinkedList* fast = head;
+    LinkedList* prev = nullptr;
+    LinkedList* temp;
+
+    // Find the middle of the linked list
+    while (fast && fast->next) {
         fast = fast->next->next;
-        if (slow == fast) {
-            return true;  // Cycle detected
-        }
+        temp = slow;
+        slow = slow->next;
+        temp->next = prev;
+        prev = temp;
     }
 
-    return false;  // No cycle found
+    // If the number of nodes is odd, skip the middle node
+    if (fast) {
+        slow = slow->next;
+    }
+
+    // Compare the two halves
+    while (prev && slow) {
+        if (prev->data != slow->data) {
+            return false;
+        }
+        prev = prev->next;
+        slow = slow->next;
+    }
+
+    return true;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     
     // Setup the linked list
-    LinkedList* head = setup_question();
+    LinkedList* head = setup_question(argc, argv);
 
-    // Call the user function to detect cycle in the linked list
-    bool has_cycle = detect_cycle(head);
+    // Call the user function to check if the linked list is a palindrome
+    bool result = is_palindrome(head);
 
     // Print the result
-    std::cout << (has_cycle ? "true" : "false") << std::endl;
+    std::cout << (result ? "true" : "false") << std::endl;
 
     return 0;
 }
@@ -350,7 +409,7 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question();
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
 
 #endif // UTIL_H
@@ -359,11 +418,8 @@ void print_LinkedList(LinkedList* head);
 <readme.md>
 ## Problem Description
 
-Given the head of a singly linked list, write a function to detect if the linked list contains a cycle. If a cycle is present, return true; otherwise, return false.
-
-## Input format
-
-The input consists of two lines. The first line contains two space-separated integers n and pos, where n is the number of nodes in the linked list and pos is the index (0-indexed) of the node where the tail connects to. The second line contains n space-separated integers, the values of the nodes in the linked list.
+Given the head of a singly linked list, write a function to check if the linked list represents a palindrome. 
+A linked list is a palindrome if the sequence of values reads the same forward and backward.
 
 ## Examples
 
@@ -371,8 +427,8 @@ The input consists of two lines. The first line contains two space-separated int
 
 **Input:**
 ```
-4 1
-1 2 3 4
+5
+1 2 3 2 1
 ```
 
 **Output:**
@@ -380,16 +436,15 @@ The input consists of two lines. The first line contains two space-separated int
 true
 ```
 
-**Explanation:** The linked list has a cycle because the last node (4) points back to the node at index 1 (value 2).
-
----
+**Explanation:**
+The linked list reads the same forward and backward, making it a palindrome.
 
 ### Example 2:
 
 **Input:**
 ```
-5 0
-3 -3 4 0 2
+4
+1 2 2 1
 ```
 
 **Output:**
@@ -397,16 +452,15 @@ true
 true
 ```
 
-**Explanation:** The last node (value 2) links back to the head node, forming a cycle.
-
----
+**Explanation:**
+The linked list is a palindrome as it is symmetric.
 
 ### Example 3:
 
 **Input:**
 ```
-3 -1
-2 0 1
+3
+1 2 3
 ```
 
 **Output:**
@@ -414,18 +468,17 @@ true
 false
 ```
 
-**Explanation:** The linked list does not have a cycle, as there is no node linking back to a previous node.
+**Explanation:**
+The linked list is not a palindrome because 1 ≠ 3.
 
----
+## Constraints:
 
-## Constraints
-
-- The number of nodes in the list is in the range [0, 10⁴].
-- -10⁵ ≤ Node.val ≤ 10⁵
+1. The number of nodes in the list is in the range `[0, 10,000]`.
+2. Each node's value satisfies `-100,000 ≤ Node.val ≤ 100,000`.
 </readme.md>
 
 <solution.md>
-# Empty solution file
+# Solutions will be added soon.
 </solution.md>
 
 <test.py>
@@ -437,74 +490,117 @@ class testCases:
         self.usage = 'prod'
         
     def test_case_1(self, timeout_window = 5, override = 0):
-        # Normal case: cycle present
-        input_str = "4 1\n1 2 3 4\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Palindrome case: odd number of elements
+        no_of_input_args = 5
+        input = [1, 2, 3, 2, 1]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_2(self, timeout_window = 5, override = 0):
-        # Normal case: no cycle
-        input_str = "5 -1\n1 2 3 4 5\n"
-        expected_value = "false"
-        return input_str, expected_value
+        # Palindrome case: even number of elements
+        no_of_input_args = 4
+        input = [1, 2, 2, 1]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_3(self, timeout_window = 5, override = 0):
-        # Edge case: single node with cycle
-        input_str = "1 0\n1\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Non-palindrome case
+        no_of_input_args = 3
+        input = [1, 2, 3]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
 
     def test_case_4(self, timeout_window = 5, override = 0):
-        # Edge case: single node without cycle
-        input_str = "1 -1\n1\n"
-        expected_value = "false"
-        return input_str, expected_value
+        # Edge case: single element
+        no_of_input_args = 1
+        input = [42]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_5(self, timeout_window = 5, override = 0):
         # Edge case: empty list
-        input_str = "0 -1\n"
-        expected_value = "false"
-        return input_str, expected_value
+        no_of_input_args = 0
+        input = []
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_6(self, timeout_window = 5, override = 0):
-        # Case: cycle at the head
-        input_str = "3 0\n1 2 3\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Palindrome with negative numbers
+        no_of_input_args = 5
+        input = [-1, -2, -3, -2, -1]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_7(self, timeout_window = 5, override = 0):
-        # Case: cycle at the tail
-        input_str = "4 3\n1 2 3 4\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Non-palindrome with mixed numbers
+        no_of_input_args = 6
+        input = [-1, 2, -3, 3, 2, 1]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
 
     def test_case_8(self, timeout_window = 5, override = 0):
-        # Case: cycle at the middle
-        input_str = "5 2\n1 2 3 4 5\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Palindrome with repeated numbers
+        no_of_input_args = 6
+        input = [1, 1, 1, 1, 1, 1]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
     def test_case_9(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
-        # Large list (10000 nodes) with cycle
-        n = 10000
-        pos = 5000
-        nodes = list(range(1, n + 1))
-        input_str = f"{n} {pos}\n" + " ".join(map(str, nodes)) + "\n"
-        expected_value = "true"
-        return input_str, expected_value
+        # Large palindrome list (10000 elements)
+        no_of_input_args = 10000
+        input = list(range(5000)) + list(range(5000)[::-1])
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
 
-    def test_case_10(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
-        # Large list (10000 nodes) without cycle
-        n = 10000
-        pos = -1
-        nodes = list(range(1, n + 1))
-        input_str = f"{n} {pos}\n" + " ".join(map(str, nodes)) + "\n"
-        expected_value = "false"
-        return input_str, expected_value
+    def test_case_10(self, timeout_window = 5, override = 0):
+        # List with alternating max and min values
+        no_of_input_args = 10
+        input = [10000, -10000, 10000, -10000, 10000, -10000, 10000, -10000, 10000, -10000]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
 </test.py>
 
-The generated code files maintain the same overall structure as the original files, with modifications to implement the new algorithm for detecting a cycle in a linked list. The majority of the code remains the same, including imports, class definitions, and helper functions. Only the algorithm-specific parts have been modified.
-
-The `readme.md` file has been updated with the problem description, input format, and examples specific to the cycle detection algorithm. The `solution.md` file is left empty as requested.
-
-The `test.py` file has been updated with 10 test cases covering various scenarios, including normal cases, edge cases, and large inputs. The `self.RUN` variable is set to 3 as specified.
+<launch.json>
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C/C++ Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/a.out",
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // Add debug arguments (refer test cases in dspcoder panel)
+            "args": [
+                "5",
+                "1",
+                "2",
+                "3",
+                "2",
+                "1"
+            ],
+            "preLaunchTask": "build"
+        }
+    ]
+}
+</launch.json>
