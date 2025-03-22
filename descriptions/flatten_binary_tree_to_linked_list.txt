@@ -1,0 +1,63 @@
+Problem Description:
+    Given the root of a binary tree, write a function to flatten the tree into a linked list in-place. The linked list should use the right pointers to point to the next node in the list, and the left pointers should be set to null. The function should return the root of the flattened linked list.
+
+Input Format:
+    The input consists of two lines:
+    The first line contains an integer n, the number of nodes in the binary tree.
+    The second line contains n space-separated integers, representing the values of the nodes in the binary tree in level-order traversal.
+
+Examples:
+
+    Example 1:
+    Input:
+        6
+        1 2 5 3 4 6
+    Output:
+        1 2 3 4 5 6
+    Explanation: The original binary tree is:
+                 1
+                / \
+               2   5
+              / \   \
+             3   4   6
+                 After flattening, it becomes:
+                 1
+                  \
+                   2
+                    \
+                     3
+                      \
+                       4
+                        \
+                         5
+                          \
+                           6
+
+    Example 2:
+    Input:
+        3
+        1 2 3
+    Output:
+        1 2 3
+    Explanation: The original binary tree is:
+                 1
+                / \
+               2   3
+                 After flattening, it becomes:
+                 1
+                  \
+                   2
+                    \
+                     3
+
+    Example 3:
+    Input:
+        1
+        42
+    Output:
+        42
+    Explanation: A single-node binary tree remains unchanged after flattening.
+
+Constraints:
+    The number of nodes in the tree is in the range [0, 10⁴].
+    -10⁵ ≤ Node.val ≤ 10⁵.

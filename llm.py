@@ -4,7 +4,7 @@ import os
 import re
 
 class generate:
-    def __init__(self, base_question_path):
+    def __init__(self, base_question_path, description_path):
         self.claude_api_key = "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" #os.environ.get('API_KEY')
         self.anthropic = Anthropic(api_key=self.claude_api_key )
         self.gpt_api_key = "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"
@@ -13,6 +13,7 @@ class generate:
         self.gpt = OpenAI(api_key = self.gpt_api_key)
         self.deepseek = OpenAI(api_key=self.deepseek_api_key, base_url="https://api.deepseek.com")
         self.code_files_path = base_question_path
+        self.description_path = description_path
         self.system_context = """
             Your task is to modify the provided code files to implement a new algorithm while maintaining the existing structure. The original files were written for a reverse_linked_list algorithm.
 
@@ -38,9 +39,8 @@ class generate:
             - self.RUN will always be 3.
             - Keep first 3 test cases length small and testing simple conditions.
             6. **readme.md**: 
-            - Contains the problem description, examples, and constraints only. 
-            - Keep similar structure as original file. 
-            - Do not include input format
+            - Contains the problem description, input format, examples, and constraints only. 
+            - Keep similar structure as original file
             7. **solution.md**: write following text in this file -> # Solutions will be added soon.
             8. **launch.json**: Configuration for launching/debugging. you only need to update args in the configurations which is argument used to run a.out executable. use argument from first test case
 
@@ -327,6 +327,69 @@ class generate:
         
         print("============= Done ============= \n")
         
+    def generate_prompt(self, new_question_name, context):
+        
+        print("============= Generating Prompt ============= ")
+        # read the description file
+        with open(f"{self.description_path}reverse_linked_list.txt", "r") as file:
+            ques_description = file.read()
+        
+        new_question_prompt = "write description similar to this for following question \n" + new_question_name + "\n" + context
+        out = ""
+        if self.model_to_use == "claude":
+            # Make the API call
+            response = self.anthropic.messages.create(
+                model="claude-3-opus-20240229",  # Latest model
+                max_tokens=4096,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": ques_description
+                    },
+                    {
+                        "role": "user",
+                        "content": new_question_prompt
+                    }
+                ], 
+                temperature = 0.0
+            )
+            out = response.content[0].text
+            
+        elif self.model_to_use == "gpt":
+            response = self.gpt.chat.completions.create(
+                model = "gpt-4o",
+                max_tokens = 4096*2,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": ques_description
+                    },
+                    {
+                        "role": "user",
+                        "content": new_question_prompt
+                    }
+                ],
+                temperature = 0.0
+            )
+            out = response.choices[0].message.content
+            
+        elif self.model_to_use == "deepseek":
+            response = self.deepseek.chat.completions.create(
+                model="deepseek-reasoner",
+                max_tokens=8192,
+                messages=[
+                    {"role": "system", "content": ques_description},
+                    {"role": "user", "content": new_question_prompt}
+                ],
+                temperature=0.0,
+            )
+            out = response.choices[0].message.content
+            
+        file_name = new_question_name.lower().replace(' ', '_')
+        with open(f"{self.description_path}{file_name}.txt", "w") as file:
+            file.write(out)
+        print(f"{file_name}")
+        print("============= Done ============= \n")
         
 if __name__ == "__main__":
     base_question_path = "./base_question/"

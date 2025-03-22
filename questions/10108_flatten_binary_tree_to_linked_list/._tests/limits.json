@@ -1,0 +1,19 @@
+{
+    "c": {
+        "stacklimit": -1,          
+        "heaplimit": -1,           
+        "ramlimit": -1,            
+        "cputimelimit": -1,             
+        "forklimit": -1,               
+        "totalprocessmemory": -1  
+    },
+    "cpp": {
+        "stacklimit": -1,          
+        "heaplimit": -1,           
+        "ramlimit": -1,            
+        "cputimelimit": -1,             
+        "forklimit": -1,               
+        "totalprocessmemory": -1
+    },
+    "_comment": "-1 is for unlimited"
+}

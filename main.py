@@ -34,6 +34,7 @@ class Question_handle:
         self.build_files_path = "./context/build_files/"
         self.koro_output_path = "./koro_output/"
         self.vscode_files_path = "./context/vscode_files/"
+        self.ques_prompts = "./descriptions/"
         
         self.ques_name = ques_name
         self.ques_description = ques_description
@@ -41,7 +42,7 @@ class Question_handle:
         self.ques_folder_name = f"{self.id}_{self.ques_name.lower().replace(' ', '_')}"
         self.question_path = f"{self.ques_save_path}{self.ques_folder_name}"
         
-        self.generate = generate(self.base_question_path)
+        self.generate = generate(self.base_question_path, self.ques_prompts)
         self.build = build(self.question_path, self.build_files_path, self.vscode_files_path, self.base_question_path)
         
     def run_koro(self):
@@ -60,6 +61,9 @@ class Question_handle:
         print("============= Done ============= \n")
     
     def run(self):
+        # context = ""
+        # context += "Input the number of elements for the both linked list in argument n"
+        # self.generate.generate_prompt("Intersection of Two Linked Lists", context)
         
         # self.generate.generate_question(ques_name, ques_description, id, self.ques_save_path)
         
@@ -75,7 +79,7 @@ class Question_handle:
         # self.build.build_cpp()
         # self.build.build()
         
-        # self.run_koro()
+        self.run_koro()
         
         # self.test_make()
         
@@ -83,15 +87,15 @@ class Question_handle:
     
 
 # Question details  
-ques_name = "palindrome_check_in_linked_list"
-id = "10105" 
+ques_name = "intersection_of_two_linked_lists"
+id = "10109" 
 ques_description = ""
 with open(f"./descriptions/{ques_name.lower().replace(' ', '_')}.txt", "r") as file:
     ques_description = file.read()
 
-# ques_description += """
-#     for setup_question take argc, argv and two linked list pointer as input and point two generated linked list to them. user function should take this two linked list and return a new linked list which is the merged linked list of the two input linked list.
-# """
+ques_description += """
+    take all inputs in setup_question function as verify function is only available in lib.c and cant be imported 
+"""
 
 
 if __name__ == "__main__":

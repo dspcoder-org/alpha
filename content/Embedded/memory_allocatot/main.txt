@@ -1,0 +1,207 @@
+Malloc Implementation Variants
+
+Basic Malloc Implementation
+
+Simple free list implementation
+First-fit allocation strategy
+Basic coalescing of adjacent free blocks
+
+
+Buddy Allocation System
+
+Power-of-2 sized memory blocks
+Efficient splitting and merging of blocks
+Good for fixed-size allocations
+
+
+Slab Allocator
+
+Pre-allocated memory chunks for specific object sizes
+Reduces fragmentation for common object sizes
+Used in many kernels including Linux
+
+
+Segregated Free Lists
+
+Multiple free lists for different sized blocks
+Better performance for varied allocation sizes
+Reduces fragmentation
+
+
+Doug Lea's dlmalloc
+
+Boundary tag method with optimizations
+Combines multiple strategies (best-fit, first-fit)
+Basis for many production allocators
+
+
+jemalloc
+
+Thread-specific caching
+Size-class segregated free lists
+Emphasizes scalability and fragmentation reduction
+
+
+tcmalloc (Google)
+
+Thread-caching malloc
+Per-thread caches for small objects
+Central page heap for large allocations
+
+
+Hoard Allocator
+
+Emphasizes multi-threaded performance
+Per-processor heaps
+Reduces false sharing
+
+
+Region-based Allocation
+
+Fast allocation by bumping a pointer
+No individual deallocation
+Deallocates entire regions at once
+
+
+Pool Allocator
+
+Fixed-size memory chunks
+Fast allocation and deallocation
+No fragmentation for fixed-size objects
+
+
+
+Coding Questions
+Basic Understanding
+
+Implement a simple version of malloc and free using the sbrk system call.
+Write a function to detect memory leaks in a custom allocator.
+Implement a memory pool allocator for fixed-size objects.
+Create a thread-safe version of malloc using mutexes.
+Implement a reference counting system for automatic memory management.
+
+Intermediate Questions
+
+Implement a custom allocator that uses a bitmap to track free/allocated blocks.
+Write a function to detect and handle fragmentation in a memory allocator.
+Create a malloc implementation that uses segregated free lists for different size classes.
+Implement a buddy allocator system with efficient splitting and merging.
+Create a memory allocator that can efficiently handle both very small and very large allocations.
+Implement a garbage collector for a custom memory allocator.
+
+Advanced Questions
+
+Design and implement a concurrent, lock-free memory allocator.
+Implement a memory allocator that minimizes false sharing in multi-threaded environments.
+Create a custom allocator that provides allocation guarantees (time or space).
+Implement a compressed memory allocator that can store more data in less physical memory.
+Design an allocator that optimizes for cache locality.
+Create a memory allocator that can efficiently handle highly variable allocation patterns.
+
+Debugging and Optimization Questions
+
+Debug a memory allocator with a memory leak.
+Optimize a malloc implementation for a specific use case (e.g., many small allocations).
+Fix a thread-safety issue in a concurrent allocator.
+Implement a profiling system for a memory allocator to identify bottlenecks.
+Create a test suite to verify the correctness of a memory allocator.
+
+Real-world Application Questions
+
+Implement a custom allocator for a specific data structure (e.g., a graph or tree).
+Create a memory allocator for an embedded system with limited resources.
+Implement a domain-specific allocator for a high-performance computing application.
+Design a memory allocator for a garbage-collected language runtime.
+Create a custom allocator for a real-time system with deterministic allocation times.
+Implement a memory allocator that integrates with OS-specific features (e.g., huge pages).
+
+
+
+Variants of malloc Implementation
+Simple malloc using a fixed-size array
+Implement a basic memory allocator using a preallocated array and manage allocations manually.
+Linked List-Based malloc
+Use a linked list to track free and allocated memory blocks.
+Buddy System Allocator
+Implement a power-of-2 memory allocation system to reduce fragmentation.
+Slab Allocator
+Use pre-allocated fixed-size blocks for efficiency in frequent allocations.
+Segregated Free Lists
+Maintain separate lists for different block sizes to speed up allocations.
+Best-Fit, First-Fit, Worst-Fit Allocation
+Implement different allocation strategies and analyze their performance.
+Thread-Safe malloc
+Implement malloc with locks or lock-free data structures to handle concurrency.
+Custom malloc with mmap/sbrk
+Use system calls like sbrk() or mmap() to allocate memory dynamically.
+Garbage-Collected malloc
+Implement reference counting or mark-and-sweep GC for automatic memory management.
+Coding Questions on Memory Allocators
+Basic Questions
+
+Implement a simple malloc using an array.
+Allocate and free memory manually without any advanced tracking.
+Simulate malloc and free with a linked list.
+Implement memory block splitting and merging upon deallocation.
+Design a memory allocator that supports calloc (zero-initialized memory).
+Extend your malloc implementation to support calloc.
+Implement a simple realloc.
+Resize an allocated memory block while preserving its content.
+Intermediate Questions
+
+Implement a memory allocator with first-fit strategy.
+Allocate the first available block that fits the requested size.
+Implement a memory allocator with best-fit strategy.
+Allocate the smallest available block that fits the requested size.
+Implement a memory allocator with worst-fit strategy.
+Allocate the largest available block that fits the requested size.
+Design a memory pool allocator.
+Preallocate a large memory pool and divide it into smaller blocks.
+Implement a memory allocator that tracks fragmentation.
+Keep track of internal and external fragmentation.
+Extend malloc to track memory leaks.
+Implement a way to detect memory leaks by keeping track of allocated but not freed blocks.
+Advanced Questions
+
+Implement a buddy system allocator.
+Use power-of-2 memory splitting for efficient allocation.
+Implement a slab allocator.
+Allocate memory in predefined sizes for fast access.
+Make a thread-safe memory allocator.
+Use mutexes or lock-free structures to handle concurrent allocations.
+Implement a garbage collector with mark-and-sweep algorithm.
+Automatically free unused memory.
+Extend malloc with mmap-based allocation.
+Allocate large memory chunks using mmap() instead of sbrk().
+Create a benchmark for different allocation strategies.
+Compare first-fit, best-fit, and buddy allocation based on performance.
+Optimize a memory allocator for embedded systems.
+Implement a minimal allocator with low overhead.
+Simulate memory fragmentation and defragmentation.
+Implement a compaction algorithm to reduce fragmentation.
+Write a memory allocator that supports memory alignment.
+Implement aligned allocations (e.g., 8-byte or 16-byte aligned).
+Implement a malloc with memory quotas per user/process.
+Restrict allocation sizes based on user-defined limits.
+Practical System-Level Tasks
+Modify the Linux malloc implementation (dlmalloc or jemalloc).
+Experiment with changes in an existing allocator.
+Implement a memory profiler.
+Track memory usage in a C program.
+Extend malloc to track memory accesses for debugging.
+Log read/write accesses to allocated memory.
+Write a tool that detects double free or use-after-free.
+Implement a basic version of AddressSanitizer.
+Optimize a memory allocator for real-time systems.
+Ensure constant-time allocation and deallocation.
+Bonus: Competitive Programming-Style Questions
+Design a system where multiple processes request memory, and you have to optimize allocations dynamically.
+Simulate OS-level memory allocation.
+Implement a page-based memory allocator.
+Allocate memory in pages like an OS virtual memory manager.
+Simulate a stack allocator and heap allocator in a single program.
+Show differences in allocation patterns.
+Implement a dynamic array-like structure using a custom allocator.
+Create a vector implementation without using malloc.
+Write a memory allocation debugger that detects uninitialized memory reads.
+Similar to valgrind, warn when reading uninitialized memory.

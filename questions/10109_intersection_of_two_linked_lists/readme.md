@@ -1,0 +1,73 @@
+## Problem Description
+
+Given the heads of two singly linked lists, write a function to find the node at which the two linked lists intersect. If the two linked lists have no intersection, return null.
+
+## Input Format
+
+The input consists of three lines:
+1. The first line contains an integer n, the number of nodes in the first linked list.
+2. The second line contains n space-separated integers, representing the values of the nodes in the first linked list.
+3. The third line contains an integer m, the number of nodes in the second linked list.
+4. The fourth line contains m space-separated integers, representing the values of the nodes in the second linked list.
+
+## Examples
+
+### Example 1:
+
+**Input:**
+```
+5
+4 1 8 4 5
+4
+5 6 1 8 4 5
+```
+
+**Output:**
+```
+8
+```
+
+**Explanation:**
+The two linked lists intersect at node with value 8.
+
+### Example 2:
+
+**Input:**
+```
+2
+1 9
+3
+3 2 4
+```
+
+**Output:**
+```
+null
+```
+
+**Explanation:**
+The two linked lists do not intersect.
+
+### Example 3:
+
+**Input:**
+```
+3
+2 6 4
+3
+1 5
+```
+
+**Output:**
+```
+null
+```
+
+**Explanation:**
+The two linked lists do not intersect.
+
+## Constraints:
+
+1. The number of nodes in each list is in the range `[0, 10,000]`.
+2. Each node's value satisfies `-100,000 ≤ Node.val ≤ 100,000`.
+3. The lists may intersect at a single node, and the intersection is defined based on reference, not value.

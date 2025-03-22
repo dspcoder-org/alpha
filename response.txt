@@ -1,7 +1,6 @@
 <lib.c>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 #define VERIFY(cond)   \
     if (!(cond)) {             \
@@ -21,8 +20,8 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question(int argc, char* argv[]);
-extern void print_LinkedList(struct Linked_List* head);
+extern struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** headB);
+extern void print_Intersection(struct Linked_List* intersection);
 
 // end of util.h
 
@@ -45,81 +44,93 @@ struct Linked_List* buildLinkedList(int arr[], int n){
     }
 
     return head; 
-
 }
 
-void print_LinkedList(struct Linked_List* head){
-
-    if(head == NULL){
-        printf(""); 
+void print_Intersection(struct Linked_List* intersection){
+    if(intersection == NULL){
+        printf("null\n");
+    } else {
+        printf("%d\n", intersection->data);
     }
-
-    while(head){
-        printf("%d", head->data); 
-        if(head->next){    
-            printf(" "); 
-        }
-        head = head->next;
-    }
-    printf("\n"); 
 }
 
-struct Linked_List* setup_question(int argc, char* argv[]) {
+struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** headB) {
 
     if (argc == 1) {
-        int n, temp;
+        int n, m, temp;
         
-        // Input the number of elements
+        // Input the number of elements for the first list
         VERIFY(((scanf("%d", &n)) > 0));
 
-        // Create an array to store the node values
-        int nodes[n];
+        // Create an array to store the node values for the first list
+        int nodesA[n];
 
-        // Input the values into the array
+        // Input the values into the array for the first list
         for (int i = 0; i < n; i++) {
-            VERIFY(((scanf("%d", &nodes[i])) > 0));
+            VERIFY(((scanf("%d", &nodesA[i])) > 0));
+        }
+
+        // Input the number of elements for the second list
+        VERIFY(((scanf("%d", &m)) > 0));
+
+        // Create an array to store the node values for the second list
+        int nodesB[m];
+
+        // Input the values into the array for the second list
+        for (int i = 0; i < m; i++) {
+            VERIFY(((scanf("%d", &nodesB[i])) > 0));
         }
 
         VERIFY(((scanf("%d", &temp)) == EOF));
 
-        // Build the linked list
-        struct Linked_List* head =  buildLinkedList(nodes, n); 
+        // Build the linked lists
+        struct Linked_List* headA = buildLinkedList(nodesA, n);
+        *headB = buildLinkedList(nodesB, m);
 
-        return head;
+        return headA;
     } else {
         int n = atoi(argv[1]);
-        int nodes[n];
+        int nodesA[n];
 
         for (int i = 0; i < n; i++) {
-            nodes[i] = atoi(argv[i+2]);
+            nodesA[i] = atoi(argv[i+2]);
         }
 
-        // Build the linked list
-        struct Linked_List* head =  buildLinkedList(nodes, n);
+        int m = atoi(argv[n+2]);
+        int nodesB[m];
 
-        return head;
+        for (int i = 0; i < m; i++) {
+            nodesB[i] = atoi(argv[n+3+i]);
+        }
+
+        // Build the linked lists
+        struct Linked_List* headA = buildLinkedList(nodesA, n);
+        *headB = buildLinkedList(nodesB, m);
+
+        return headA;
     }
 }
 </lib.c>
 
 <main.c>
 #include "util.h"
-#include <stdbool.h>
 
-bool is_palindrome(struct Linked_List* head) {
+struct Linked_List* getIntersectionNode(struct Linked_List* headA, struct Linked_List* headB) {
     // Write your code here
+    return NULL;
 }
 
 int main(int argc, char* argv[]) {
 
-    // Setup the linked list
-    struct Linked_List* head = setup_question(argc, argv);
+    // Setup the linked lists
+    struct Linked_List* headB;
+    struct Linked_List* headA = setup_question(argc, argv, &headB);
     
-    // User function to check if the linked list is a palindrome
-    bool result = is_palindrome(head); 
+    // User function to find the intersection node
+    struct Linked_List* intersection = getIntersectionNode(headA, headB); 
 
-    // Print the result
-    printf(result ? "true\n" : "false\n");
+    // Print the intersection node
+    print_Intersection(intersection);
     
     return 0;
 }
@@ -136,53 +147,34 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question(int argc, char* argv[]);
-extern void print_LinkedList(struct Linked_List* head);
+extern struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** headB);
+extern void print_Intersection(struct Linked_List* intersection);
 
-bool is_palindrome(struct Linked_List* head) {
-    if (!head || !head->next) return true;
+struct Linked_List* getIntersectionNode(struct Linked_List* headA, struct Linked_List* headB) {
+    if (!headA || !headB) return NULL;
 
-    struct Linked_List* slow = head;
-    struct Linked_List* fast = head;
-    struct Linked_List* prev = NULL;
-    struct Linked_List* temp;
+    struct Linked_List* a = headA;
+    struct Linked_List* b = headB;
 
-    // Find the middle of the linked list
-    while (fast && fast->next) {
-        fast = fast->next->next;
-        temp = slow;
-        slow = slow->next;
-        temp->next = prev;
-        prev = temp;
+    while (a != b) {
+        a = a ? a->next : headB;
+        b = b ? b->next : headA;
     }
 
-    // If the number of nodes is odd, skip the middle node
-    if (fast) {
-        slow = slow->next;
-    }
-
-    // Compare the two halves
-    while (prev && slow) {
-        if (prev->data != slow->data) {
-            return false;
-        }
-        prev = prev->next;
-        slow = slow->next;
-    }
-
-    return true;
+    return a;
 }
 
 int main(int argc, char* argv[]) {
 
-    // Setup the linked list
-    struct Linked_List* head = setup_question(argc, argv);
+    // Setup the linked lists
+    struct Linked_List* headB;
+    struct Linked_List* headA = setup_question(argc, argv, &headB);
     
-    // User function to check if the linked list is a palindrome
-    bool result = is_palindrome(head); 
+    // User function to find the intersection node
+    struct Linked_List* intersection = getIntersectionNode(headA, headB); 
 
-    // Print the result
-    printf(result ? "true\n" : "false\n");
+    // Print the intersection node
+    print_Intersection(intersection);
     
     return 0;
 }
@@ -202,8 +194,8 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question(int argc, char* argv[]);
-extern void print_LinkedList(struct Linked_List* head);
+extern struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** headB);
+extern void print_Intersection(struct Linked_List* intersection);
 
 #endif // UTIL_H
 </util.h>
@@ -229,8 +221,8 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question(int argc, char* argv[]);
-void print_LinkedList(LinkedList* head);
+LinkedList* setup_question(int argc, char* argv[], LinkedList** headB);
+void print_Intersection(LinkedList* intersection);
 
 // Function to build a linked list from an array
 LinkedList* buildLinkedList(int arr[], int n) {
@@ -249,55 +241,68 @@ LinkedList* buildLinkedList(int arr[], int n) {
     return head;
 }
 
-// Function to print the linked list
-void print_LinkedList(LinkedList* head) {
-    if (!head) {
-        return;
+// Function to print the intersection node
+void print_Intersection(LinkedList* intersection) {
+    if (!intersection) {
+        std::cout << "null\n";
+    } else {
+        std::cout << intersection->data << "\n";
     }
-
-    while (head) {
-        std::cout << head->data;
-        if (head->next) {
-            std::cout << " ";
-        }
-        head = head->next;
-    }
-    std::cout << std::endl;
 }
 
-LinkedList* setup_question(int argc, char* argv[]) {
+LinkedList* setup_question(int argc, char* argv[], LinkedList** headB) {
 
     if (argc == 1) {
-        // Input the number of elements
-        int n, temp;
-        // Input the number of elements
+        // Input the number of elements for the first list
+        int n, m, temp;
         VERIFY((std::cin >> n));
 
-        // Dynamically allocate an array to store the node values
-        int* nodes = new int[n];
+        // Dynamically allocate an array to store the node values for the first list
+        int* nodesA = new int[n];
 
-        // Input the values into the array
+        // Input the values into the array for the first list
         for (int i = 0; i < n; i++) {
-            VERIFY((std::cin >> nodes[i]));
+            VERIFY((std::cin >> nodesA[i]));
         }
+
+        // Input the number of elements for the second list
+        VERIFY((std::cin >> m));
+
+        // Dynamically allocate an array to store the node values for the second list
+        int* nodesB = new int[m];
+
+        // Input the values into the array for the second list
+        for (int i = 0; i < m; i++) {
+            VERIFY((std::cin >> nodesB[i]));
+        }
+
         // Check if there are any extra inputs
-        // If there are, then the input is invalid
         VERIFY((std::cin >> temp).fail() == true);
 
-        // Build the linked list
-        LinkedList* head = buildLinkedList(nodes, n);
+        // Build the linked lists
+        LinkedList* headA = buildLinkedList(nodesA, n);
+        *headB = buildLinkedList(nodesB, m);
 
-        return head;
+        return headA;
     }
     else {
         int n = std::stoi(argv[1]);
-        int* nodes = new int[n];
+        int* nodesA = new int[n];
         for (int i = 0; i < n; i++) {
-            nodes[i] = std::stoi(argv[i + 2]);
+            nodesA[i] = std::stoi(argv[i + 2]);
         }
-        LinkedList* head = buildLinkedList(nodes, n);
 
-        return head;
+        int m = std::stoi(argv[n + 2]);
+        int* nodesB = new int[m];
+        for (int i = 0; i < m; i++) {
+            nodesB[i] = std::stoi(argv[n + 3 + i]);
+        }
+
+        // Build the linked lists
+        LinkedList* headA = buildLinkedList(nodesA, n);
+        *headB = buildLinkedList(nodesB, m);
+
+        return headA;
     }
 }
 </lib.cpp>
@@ -307,20 +312,22 @@ LinkedList* setup_question(int argc, char* argv[]) {
 #include <vector>
 #include <iostream>
 
-bool is_palindrome(LinkedList* head) {
+LinkedList* getIntersectionNode(LinkedList* headA, LinkedList* headB) {
     // Write your code here
+    return nullptr;
 }
 
 int main(int argc, char* argv[]) {
     
-    // Setup the linked list
-    LinkedList* head = setup_question(argc, argv);
+    // Setup the linked lists
+    LinkedList* headB;
+    LinkedList* headA = setup_question(argc, argv, &headB);
 
-    // Call the user function to check if the linked list is a palindrome
-    bool result = is_palindrome(head);
+    // Call the user function to find the intersection node
+    LinkedList* intersection = getIntersectionNode(headA, headB);
 
-    // Print the result
-    std::cout << (result ? "true" : "false") << std::endl;
+    // Print the intersection node
+    print_Intersection(intersection);
 
     return 0;
 }
@@ -340,53 +347,34 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question(int argc, char* argv[]);
-void print_LinkedList(LinkedList* head);
+LinkedList* setup_question(int argc, char* argv[], LinkedList** headB);
+void print_Intersection(LinkedList* intersection);
 
-bool is_palindrome(LinkedList* head) {
-    if (!head || !head->next) return true;
+LinkedList* getIntersectionNode(LinkedList* headA, LinkedList* headB) {
+    if (!headA || !headB) return nullptr;
 
-    LinkedList* slow = head;
-    LinkedList* fast = head;
-    LinkedList* prev = nullptr;
-    LinkedList* temp;
+    LinkedList* a = headA;
+    LinkedList* b = headB;
 
-    // Find the middle of the linked list
-    while (fast && fast->next) {
-        fast = fast->next->next;
-        temp = slow;
-        slow = slow->next;
-        temp->next = prev;
-        prev = temp;
+    while (a != b) {
+        a = a ? a->next : headB;
+        b = b ? b->next : headA;
     }
 
-    // If the number of nodes is odd, skip the middle node
-    if (fast) {
-        slow = slow->next;
-    }
-
-    // Compare the two halves
-    while (prev && slow) {
-        if (prev->data != slow->data) {
-            return false;
-        }
-        prev = prev->next;
-        slow = slow->next;
-    }
-
-    return true;
+    return a;
 }
 
 int main(int argc, char* argv[]) {
     
-    // Setup the linked list
-    LinkedList* head = setup_question(argc, argv);
+    // Setup the linked lists
+    LinkedList* headB;
+    LinkedList* headA = setup_question(argc, argv, &headB);
 
-    // Call the user function to check if the linked list is a palindrome
-    bool result = is_palindrome(head);
+    // Call the user function to find the intersection node
+    LinkedList* intersection = getIntersectionNode(headA, headB);
 
-    // Print the result
-    std::cout << (result ? "true" : "false") << std::endl;
+    // Print the intersection node
+    print_Intersection(intersection);
 
     return 0;
 }
@@ -409,8 +397,8 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question(int argc, char* argv[]);
-void print_LinkedList(LinkedList* head);
+LinkedList* setup_question(int argc, char* argv[], LinkedList** headB);
+void print_Intersection(LinkedList* intersection);
 
 #endif // UTIL_H
 </util.hpp>
@@ -418,8 +406,15 @@ void print_LinkedList(LinkedList* head);
 <readme.md>
 ## Problem Description
 
-Given the head of a singly linked list, write a function to check if the linked list represents a palindrome. 
-A linked list is a palindrome if the sequence of values reads the same forward and backward.
+Given the heads of two singly linked lists, write a function to find the node at which the two linked lists intersect. If the two linked lists have no intersection, return null.
+
+## Input Format
+
+The input consists of three lines:
+1. The first line contains an integer n, the number of nodes in the first linked list.
+2. The second line contains n space-separated integers, representing the values of the nodes in the first linked list.
+3. The third line contains an integer m, the number of nodes in the second linked list.
+4. The fourth line contains m space-separated integers, representing the values of the nodes in the second linked list.
 
 ## Examples
 
@@ -428,53 +423,60 @@ A linked list is a palindrome if the sequence of values reads the same forward a
 **Input:**
 ```
 5
-1 2 3 2 1
+4 1 8 4 5
+4
+5 6 1 8 4 5
 ```
 
 **Output:**
 ```
-true
+8
 ```
 
 **Explanation:**
-The linked list reads the same forward and backward, making it a palindrome.
+The two linked lists intersect at node with value 8.
 
 ### Example 2:
 
 **Input:**
 ```
-4
-1 2 2 1
+2
+1 9
+3
+3 2 4
 ```
 
 **Output:**
 ```
-true
+null
 ```
 
 **Explanation:**
-The linked list is a palindrome as it is symmetric.
+The two linked lists do not intersect.
 
 ### Example 3:
 
 **Input:**
 ```
 3
-1 2 3
+2 6 4
+3
+1 5
 ```
 
 **Output:**
 ```
-false
+null
 ```
 
 **Explanation:**
-The linked list is not a palindrome because 1 ≠ 3.
+The two linked lists do not intersect.
 
 ## Constraints:
 
-1. The number of nodes in the list is in the range `[0, 10,000]`.
+1. The number of nodes in each list is in the range `[0, 10,000]`.
 2. Each node's value satisfies `-100,000 ≤ Node.val ≤ 100,000`.
+3. The lists may intersect at a single node, and the intersection is defined based on reference, not value.
 </readme.md>
 
 <solution.md>
@@ -490,83 +492,103 @@ class testCases:
         self.usage = 'prod'
         
     def test_case_1(self, timeout_window = 5, override = 0):
-        # Palindrome case: odd number of elements
-        no_of_input_args = 5
-        input = [1, 2, 3, 2, 1]
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'true'
+        # Normal case: intersection at a middle node
+        no_of_input_args_A = 5
+        input_A = [4, 1, 8, 4, 5]
+        no_of_input_args_B = 4
+        input_B = [5, 6, 1, 8, 4, 5]
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = '8'
         return numbers, expected_value
 
     def test_case_2(self, timeout_window = 5, override = 0):
-        # Palindrome case: even number of elements
-        no_of_input_args = 4
-        input = [1, 2, 2, 1]
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'true'
+        # Normal case: no intersection
+        no_of_input_args_A = 2
+        input_A = [1, 9]
+        no_of_input_args_B = 3
+        input_B = [3, 2, 4]
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = 'null'
         return numbers, expected_value
 
     def test_case_3(self, timeout_window = 5, override = 0):
-        # Non-palindrome case
-        no_of_input_args = 3
-        input = [1, 2, 3]
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'false'
+        # Edge case: both lists are empty
+        no_of_input_args_A = 0
+        input_A = []
+        no_of_input_args_B = 0
+        input_B = []
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = 'null'
         return numbers, expected_value
 
     def test_case_4(self, timeout_window = 5, override = 0):
-        # Edge case: single element
-        no_of_input_args = 1
-        input = [42]
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'true'
+        # Edge case: one list is empty
+        no_of_input_args_A = 3
+        input_A = [2, 6, 4]
+        no_of_input_args_B = 0
+        input_B = []
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = 'null'
         return numbers, expected_value
 
     def test_case_5(self, timeout_window = 5, override = 0):
-        # Edge case: empty list
-        no_of_input_args = 0
-        input = []
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'true'
+        # Edge case: intersection at the first node
+        no_of_input_args_A = 3
+        input_A = [1, 2, 3]
+        no_of_input_args_B = 3
+        input_B = [1, 2, 3]
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = '1'
         return numbers, expected_value
 
     def test_case_6(self, timeout_window = 5, override = 0):
-        # Palindrome with negative numbers
-        no_of_input_args = 5
-        input = [-1, -2, -3, -2, -1]
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'true'
+        # Case with negative numbers
+        no_of_input_args_A = 4
+        input_A = [-9999, -7777, -5555, -3333]
+        no_of_input_args_B = 4
+        input_B = [-9999, -7777, -5555, -3333]
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = '-9999'
         return numbers, expected_value
 
     def test_case_7(self, timeout_window = 5, override = 0):
-        # Non-palindrome with mixed numbers
-        no_of_input_args = 6
-        input = [-1, 2, -3, 3, 2, 1]
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'false'
+        # Case with mixed positive and negative numbers
+        no_of_input_args_A = 5
+        input_A = [-10000, 0, 5555, -9999, 2222]
+        no_of_input_args_B = 5
+        input_B = [5555, -9999, 2222, -1111, 10000]
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = '5555'
         return numbers, expected_value
 
     def test_case_8(self, timeout_window = 5, override = 0):
-        # Palindrome with repeated numbers
-        no_of_input_args = 6
-        input = [1, 1, 1, 1, 1, 1]
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'true'
+        # Case with repeated numbers
+        no_of_input_args_A = 6
+        input_A = [9999, 9999, -9999, -9999, 0, 0]
+        no_of_input_args_B = 6
+        input_B = [9999, 9999, -9999, -9999, 0, 0]
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = '9999'
         return numbers, expected_value
 
     def test_case_9(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
-        # Large palindrome list (10000 elements)
-        no_of_input_args = 10000
-        input = list(range(5000)) + list(range(5000)[::-1])
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'true'
+        # Large list (10000 elements)
+        no_of_input_args_A = 10000
+        input_A = list(range(-5000, 5000))
+        no_of_input_args_B = 10000
+        input_B = list(range(-5000, 5000))
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = '-5000'
         return numbers, expected_value
 
     def test_case_10(self, timeout_window = 5, override = 0):
         # List with alternating max and min values
-        no_of_input_args = 10
-        input = [10000, -10000, 10000, -10000, 10000, -10000, 10000, -10000, 10000, -10000]
-        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
-        expected_value = 'false'
+        no_of_input_args_A = 10
+        input_A = [10000, -10000] * 5
+        no_of_input_args_B = 10
+        input_B = [10000, -10000] * 5
+        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
+        expected_value = '10000'
         return numbers, expected_value
 </test.py>
 
@@ -593,11 +615,18 @@ class testCases:
             // Add debug arguments (refer test cases in dspcoder panel)
             "args": [
                 "5",
+                "4",
                 "1",
-                "2",
-                "3",
-                "2",
-                "1"
+                "8",
+                "4",
+                "5",
+                "4",
+                "5",
+                "6",
+                "1",
+                "8",
+                "4",
+                "5"
             ],
             "preLaunchTask": "build"
         }
