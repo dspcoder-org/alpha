@@ -5,11 +5,7 @@ import re
 
 class generate:
     def __init__(self, base_question_path, description_path):
-        self.model_to_use = "gpt"
-        self.gpt = OpenAI(api_key = self.gpt_api_key)
-        self.deepseek = OpenAI(api_key=self.deepseek_api_key, base_url="https://api.deepseek.com")
-        self.code_files_path = base_question_path
-        self.description_path = description_path
+        
         self.system_context = """
             Your task is to modify the provided code files to implement a new algorithm while maintaining the existing structure. The original files were written for a reverse_linked_list algorithm.
 
