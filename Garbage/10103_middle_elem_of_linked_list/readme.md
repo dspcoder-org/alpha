@@ -20,8 +20,6 @@ Given the head of a singly linked list, write a function to find the middle elem
 **Explanation:**
 The middle node in the odd-length list is the 3rd node.
 
-
-
 ### Example 2:
 
 **Input:**
@@ -37,8 +35,6 @@ The middle node in the odd-length list is the 3rd node.
 
 **Explanation:**
 For an even-length list, return the second middle node (the 3rd node).
-
-
 
 ### Example 3:
 
@@ -56,9 +52,7 @@ For an even-length list, return the second middle node (the 3rd node).
 **Explanation:**
 For a single-node list, return that node.
 
-
-
 ## Constraints:
 
-1. The number of nodes in the list is in the range `[1, 10^4]`.
-2. Each node's value satisfies `-10^5 ≤ Node.val ≤ 10^5`.
+1. The number of nodes in the list is in the range `[1, 10,000]`.
+2. Each node's value satisfies `-100,000 ≤ Node.val ≤ 100,000`.

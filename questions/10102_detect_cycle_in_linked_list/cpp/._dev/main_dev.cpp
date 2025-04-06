@@ -1,33 +1,24 @@
-#include <vector>
+// Util.h
 #include <iostream>
+#include <vector>
 
 class LinkedList {
 public:
     int data;
     LinkedList* next;
-
     LinkedList(int val) : data(val), next(nullptr) {}
 };
 
-// Function declarations
-
+// Function declared in libdspcoder.a
 LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
+void delete_LinkedList(LinkedList* head);
 
-bool detect_cycle(LinkedList* head) {
-    LinkedList* slow = head;
-    LinkedList* fast = head;
+// User function
+bool detect_cycle_in_linked_list(LinkedList* head);
 
-    while (fast != nullptr && fast->next != nullptr) {
-        slow = slow->next;
-        fast = fast->next->next;
+// Util.h end
 
-        if (slow == fast) {
-            return true;
-        }
-    }
-    return false;
-}
 
 int main(int argc, char* argv[]) {
     
@@ -35,10 +26,13 @@ int main(int argc, char* argv[]) {
     LinkedList* head = setup_question(argc, argv);
 
     // Call the user function to detect cycle in the linked list
-    bool has_cycle = detect_cycle(head);
+    bool has_cycle = detect_cycle_in_linked_list(head);
 
     // Print the result
     std::cout << (has_cycle ? "true" : "false") << std::endl;
+
+    // Free the memory allocated for the linked list
+    delete_LinkedList(head);
 
     return 0;
 }

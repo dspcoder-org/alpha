@@ -7,19 +7,25 @@
         exit(0);               \
     }
 
-// Copy content of util.hpp
+// Util.h
+#include <iostream>
+#include <vector>
+
 class LinkedList {
 public:
     int data;
     LinkedList* next;
-
     LinkedList(int val) : data(val), next(nullptr) {}
 };
 
-// Function declarations
-
-LinkedList* setup_question();
+// Function declared in libdspcoder.a
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
+
+// User function
+void reverse_Linked_list(LinkedList** head);
+
+// Util.h end
 
 // Function to build a linked list from an array
 LinkedList* buildLinkedList(int arr[], int n) {
@@ -54,6 +60,15 @@ void print_LinkedList(LinkedList* head) {
     std::cout << std::endl;
 }
 
+// Function to delete the linked list
+void delete_LinkedList(LinkedList* head) {
+    while (head) {
+        LinkedList* temp = head;
+        head = head->next;
+        delete temp;
+    }
+}
+
 LinkedList* setup_question(int argc, char* argv[]) {
 
     if (argc == 1) {
@@ -75,6 +90,7 @@ LinkedList* setup_question(int argc, char* argv[]) {
 
         // Build the linked list
         LinkedList* head = buildLinkedList(nodes, n);
+        delete[] nodes; // Free allocated memory
 
         return head;
     }
@@ -85,6 +101,7 @@ LinkedList* setup_question(int argc, char* argv[]) {
             nodes[i] = std::stoi(argv[i + 2]);
         }
         LinkedList* head = buildLinkedList(nodes, n);
+        delete[] nodes; // Free allocated memory
 
         return head;
     }

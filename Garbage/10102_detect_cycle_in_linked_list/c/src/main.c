@@ -1,24 +1,19 @@
-#include "../inc/util.h"
+#include "util.h"
 
 bool detect_cycle(struct Linked_List* head) {
     // Write your code here
-    
 }
 
-int main(){
+int main(int argc, char* argv[]) {
 
     // Setup the linked list
-    struct Linked_List* head = setup_question();
+    struct Linked_List* head = setup_question(argc, argv);
     
     // User function to detect cycle in the linked list
-    bool hasCycle = detect_cycle(head);
+    bool has_cycle = detect_cycle(head); 
 
     // Print the result
-    if (hasCycle) {
-        printf("true\n");
-    } else {
-        printf("false\n");
-    }
+    printf("%s\n", has_cycle ? "true" : "false");
     
     return 0;
 }

@@ -1,37 +1,24 @@
-#include <vector>
+// Util.h
 #include <iostream>
+#include <vector>
 
 class LinkedList {
 public:
     int data;
     LinkedList* next;
-
     LinkedList(int val) : data(val), next(nullptr) {}
 };
 
-// Function declarations
-
+// Function declared in libdspcoder.a
 LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
+void delete_LinkedList(LinkedList* head);
 
-void reverse_Linked_list(LinkedList** head) {
-    LinkedList* prev = nullptr;
-    LinkedList* current = *head;
-    LinkedList* next = nullptr;
+// User function
+void reverse_Linked_list(LinkedList** head);
 
-    while (current != nullptr) {
-        // Store the next node
-        next = current->next;
-        // Reverse the current node's pointer
-        current->next = prev;
-        // Move pointers one position ahead
-        prev = current;
-        current = next;
-    }
+// Util.h end
 
-    // Update the head to the new front of the list
-    *head = prev;
-}
 
 int main(int argc, char* argv[]) {
     
@@ -43,6 +30,9 @@ int main(int argc, char* argv[]) {
 
     // Print the linked list
     print_LinkedList(head);
+
+    // Free the memory allocated for the linked list
+    delete_LinkedList(head);
 
     return 0;
 }

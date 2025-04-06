@@ -1,0 +1,249 @@
+{
+    "metadata": {
+        "Total_Time": 0.49320387840270996,
+        "overall_status": "FAIL",
+        "mem_stat": {}
+    },
+    "test_cases": {
+        "test_case_1": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "4 1\n1 2 3 4",
+            "error": null,
+            "exe_time": 0.21912598609924316,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_10": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "10 5\n10000 -10000 10000...000 -10000 10000 -10000",
+            "error": null,
+            "exe_time": 0.018423795700073242,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_11": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "5 -1\n7 7 7 7 7",
+            "error": null,
+            "exe_time": 0.007136106491088867,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_12": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "5 2\n1 2 3 4 5",
+            "error": null,
+            "exe_time": 0.05832624435424805,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_13": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "5 -1\n5 4 3 2 1",
+            "error": null,
+            "exe_time": 0.006161928176879883,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_14": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "6 1\n-1 1 -2 2 -3 3",
+            "error": null,
+            "exe_time": 0.01466512680053711,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_15": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "4 -1\n0 0 0 0",
+            "error": null,
+            "exe_time": 0.0055141448974609375,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_16": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "3 0\n99999 88888 77777",
+            "error": null,
+            "exe_time": 0.01514291763305664,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_17": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "3 -1\n-99999 -88888 -77777",
+            "error": null,
+            "exe_time": 0.00544285774230957,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_18": {
+            "status": "FAIL",
+            "executable output": "",
+            "expected output": "true",
+            "input": "4 2\n99999 -99999 88888 -88888",
+            "error": null,
+            "exe_time": 0.015108823776245117,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_19": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "5 -1\n1 10000 -1 -10000 0",
+            "error": null,
+            "exe_time": 0.0055751800537109375,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_2": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "5 0\n3 -3 4 0 2",
+            "error": null,
+            "exe_time": 0.015100955963134766,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_20": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "1 0\n100000",
+            "error": null,
+            "exe_time": 0.015616893768310547,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_21": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "5 -1\n0 0 0 0 0",
+            "error": null,
+            "exe_time": 0.005483150482177734,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_22": {
+            "status": "FAIL",
+            "executable output": "",
+            "expected output": "true",
+            "input": "6 4\n100000 -1 99999 -2 88888 -3",
+            "error": null,
+            "exe_time": 0.014668941497802734,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_23": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "2 -1\n2147483647 -2147483648",
+            "error": null,
+            "exe_time": 0.005607128143310547,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_3": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "3 -1\n2 0 1",
+            "error": null,
+            "exe_time": 0.005166053771972656,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_4": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "1 -1\n42",
+            "error": null,
+            "exe_time": 0.005409955978393555,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_5": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "1 0\n42",
+            "error": null,
+            "exe_time": 0.01747298240661621,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_6": {
+            "status": "FAIL",
+            "executable output": "",
+            "expected output": "true",
+            "input": "4 2\n-9999 -7777 -5555 -3333",
+            "error": null,
+            "exe_time": 0.015998125076293945,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_7": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "7 -1\n-10000 0 5555 -9999 2222 -1111 10000",
+            "error": null,
+            "exe_time": 0.005457878112792969,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_8": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "6 3\n9999 9999 -9999 -9999 0 0",
+            "error": null,
+            "exe_time": 0.004800081253051758,
+            "timeout": 5,
+            "Override_Level": "0"
+        },
+        "test_case_9": {
+            "status": "PASS",
+            "executable output": "false",
+            "expected output": "false",
+            "input": "10000 -1\n-5000 -4999 -4...995 4996 4997 4998 4999",
+            "error": null,
+            "exe_time": 0.00576472282409668,
+            "timeout": 15,
+            "Override_Level": "0"
+        },
+        "test_case_master": {
+            "status": "PASS",
+            "executable output": "true",
+            "expected output": "true",
+            "input": "10000 5000\n-5000 -4999 ...995 4996 4997 4998 4999",
+            "error": null,
+            "exe_time": 0.006033897399902344,
+            "timeout": 5,
+            "Override_Level": "0"
+        }
+    }
+}

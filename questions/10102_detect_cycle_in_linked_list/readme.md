@@ -52,7 +52,7 @@ false
 **Explanation:**
 The linked list does not have a cycle, as there is no node linking back to a previous node.
 
-## Constraints:
+## Constraints
 
-1. The number of nodes in the list is in the range `[0, 10,000]`.
-2. Each node's value satisfies `-100,000 ≤ Node.val ≤ 100,000`.
+1. The number of nodes in the list is in the range [0, 10⁴].
+2. -10⁵ ≤ Node.val ≤ 10⁵

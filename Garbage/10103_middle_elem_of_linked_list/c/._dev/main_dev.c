@@ -8,35 +8,31 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question();
+extern struct Linked_List* setup_question(int argc, char* argv[]);
 extern void print_LinkedList(struct Linked_List* head);
 
-int find_middle_elem(struct Linked_List* head) {
-    // Write your code here
-    if (head == NULL)
-        return -1;
-    
-    struct Linked_List* slow_ptr = head;
-    struct Linked_List* fast_ptr = head;
-    
-    while (fast_ptr != NULL && fast_ptr->next != NULL) {
-        slow_ptr = slow_ptr->next;
-        fast_ptr = fast_ptr->next->next;
+int find_middle_element(struct Linked_List* head) {
+    struct Linked_List* slow = head;
+    struct Linked_List* fast = head;
+
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
     }
-    
-    return slow_ptr->data;
+
+    return slow->data;
 }
 
-int main(){
+int main(int argc, char* argv[]) {
 
     // Setup the linked list
-    struct Linked_List* head = setup_question();
+    struct Linked_List* head = setup_question(argc, argv);
     
-    // User function to find the middle element of the linked list
-    int middle_elem = find_middle_elem(head); 
+    // User function to find the middle element
+    int middle = find_middle_element(head); 
 
     // Print the middle element
-    printf("%d\n", middle_elem);
+    printf("%d\n", middle);
     
     return 0;
 }

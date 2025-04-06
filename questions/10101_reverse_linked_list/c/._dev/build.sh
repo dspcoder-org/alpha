@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC_DIR="."
 LIB_DIR="../lib"
 EXEC_DIR="."
-MAIN_SRC="${SRC_DIR}/main_dev.c"
+MAIN_SRC="${SRC_DIR}/main_dev.c ${SRC_DIR}/solution_dev.c"
 LIB_OBJ="${LIB_DIR}/libdspcoder.a"
 EXEC="${EXEC_DIR}/a.out"
 

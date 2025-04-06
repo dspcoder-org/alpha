@@ -1,21 +1,17 @@
 #include "util.hpp"
-#include <vector>
-#include <iostream>
-
-bool detect_cycle(LinkedList* head) {
-    // Write your code here
-}
 
 int main(int argc, char* argv[]) {
-    
-    // Setup the linked list
+    // Initialize the linked list using setup_question
     LinkedList* head = setup_question(argc, argv);
 
-    // Call the user function to detect cycle in the linked list
-    bool has_cycle = detect_cycle(head);
+    // Detect cycle in the linked list using the user-defined function
+    bool has_cycle = detect_cycle_in_linked_list(head);
 
     // Print the result
     std::cout << (has_cycle ? "true" : "false") << std::endl;
+
+    // Free the memory allocated for the linked list
+    delete_LinkedList(head);
 
     return 0;
 }

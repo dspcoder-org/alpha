@@ -20,7 +20,7 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern struct Linked_List* setup_question();
+extern struct Linked_List* setup_question(int argc, char* argv[]);
 extern void print_LinkedList(struct Linked_List* head);
 
 // end of util.h
@@ -44,6 +44,7 @@ struct Linked_List* buildLinkedList(int arr[], int n){
     }
 
     return head; 
+
 }
 
 void print_LinkedList(struct Linked_List* head){
@@ -62,24 +63,39 @@ void print_LinkedList(struct Linked_List* head){
     printf("\n"); 
 }
 
-struct Linked_List* setup_question(){
-    int n, temp;
-    
-    // Input the number of elements
-    VERIFY(((scanf("%d", &n)) > 0)); ;
+struct Linked_List* setup_question(int argc, char* argv[]) {
 
-    // Create an array to store the node values
-    int nodes[n];
+    if (argc == 1) {
+        int n, temp;
+        
+        // Input the number of elements
+        VERIFY(((scanf("%d", &n)) > 0));
 
-    // Input the values into the array
-    for (int i = 0; i < n; i++) {
-        VERIFY(((scanf("%d", &nodes[i])) > 0));
+        // Create an array to store the node values
+        int nodes[n];
+
+        // Input the values into the array
+        for (int i = 0; i < n; i++) {
+            VERIFY(((scanf("%d", &nodes[i])) > 0));
+        }
+
+        VERIFY(((scanf("%d", &temp)) == EOF));
+
+        // Build the linked list
+        struct Linked_List* head =  buildLinkedList(nodes, n); 
+
+        return head;
+    } else {
+        int n = atoi(argv[1]);
+        int nodes[n];
+
+        for (int i = 0; i < n; i++) {
+            nodes[i] = atoi(argv[i+2]);
+        }
+
+        // Build the linked list
+        struct Linked_List* head =  buildLinkedList(nodes, n);
+
+        return head;
     }
-
-    VERIFY(((scanf("%d", &temp)) == EOF));
-
-    // Build the linked list
-    struct Linked_List* head =  buildLinkedList(nodes, n); 
-
-    return head;
 }

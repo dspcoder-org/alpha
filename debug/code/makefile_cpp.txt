@@ -1,0 +1,38 @@
+# C++ compiler and flags
+CXX = g++
+CXXFLAGS = -Wall -Wextra -g -O0 -std=c++17
+
+# Source files and output
+SRCS = src/main.cpp lib/lib.cpp
+OBJS = $(SRCS:.cpp=.o)
+TARGET = a.out
+
+# Default target
+all: $(TARGET)
+
+# Linking
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# Compiling
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Dependencies
+src/main.o: src/main.cpp inc/util.h
+lib/lib.o: lib/lib.cpp inc/util.h
+
+# Phony targets
+.PHONY: clean debug run
+
+# Clean build files
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+# Debug target - run with gdb
+debug: $(TARGET)
+	gdb ./$(TARGET)
+
+# Run the program
+run: $(TARGET)
+	./$(TARGET)

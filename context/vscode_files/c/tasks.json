@@ -25,7 +25,8 @@
             "type": "shell",
             "command": "code-server",
             "args": [
-                "${workspaceFolder}/src/main.c"
+                "${workspaceFolder}/src/main.c",
+                "${workspaceFolder}/src/solution.c"
             ],
             "presentation": {
                 "reveal": "never",

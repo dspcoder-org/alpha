@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "LLDB Debug Launch",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/a.out",
+        "args": [
+          "5",
+          "4", "1", "8", "4", "5",
+          "6",
+          "5", "6", "1", "8", "4", "5"
+        ],
+        "stopAtEntry": true,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb",
+        "preLaunchTask": "build"
+      },
+      {
+        "name": "LLDB Attach",
+        "type": "cppdbg",
+        "request": "attach",
+        "program": "${workspaceFolder}/a.out",
+        "MIMode": "lldb",
+        "processId": "${command:pickProcess}"
+      }
+    ]
+  }

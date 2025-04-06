@@ -10,7 +10,7 @@ LIB_OBJ = $(LIB_DIR)/libdspcoder.a
 
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -fPIC -Wno-return-type
+CXXFLAGS = -std=c++20 -Wall -fPIC -Wno-return-type -g
 INCLUDES = -I$(INC_DIR)
 
 # Default target

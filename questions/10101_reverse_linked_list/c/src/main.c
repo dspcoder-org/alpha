@@ -1,9 +1,5 @@
 #include "util.h"
 
-void reverse_Linked_list(struct Linked_List** head) {
-    // Write your code here
-}
-
 int main(int argc, char* argv[]) {
 
     // Setup the linked list
@@ -14,6 +10,9 @@ int main(int argc, char* argv[]) {
 
     // Print the linked list
     print_LinkedList(head);
+
+    // Free the linked list to prevent memory leaks
+    free_LinkedList(head);
     
     return 0;
 }

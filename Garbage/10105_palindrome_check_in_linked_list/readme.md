@@ -1,6 +1,7 @@
 ## Problem Description
 
-Given the head of a singly linked list, your task is to check if the list represents a palindrome. A linked list is a palindrome if the sequence of values reads the same forward and backward.
+Given the head of a singly linked list, write a function to check if the linked list represents a palindrome. 
+A linked list is a palindrome if the sequence of values reads the same forward and backward.
 
 ## Examples
 
@@ -18,9 +19,7 @@ true
 ```
 
 **Explanation:**
-The linked list `1 -> 2 -> 3 -> 2 -> 1` reads the same forward and backward, making it a palindrome.
-
-
+The linked list reads the same forward and backward, making it a palindrome.
 
 ### Example 2:
 
@@ -36,9 +35,7 @@ true
 ```
 
 **Explanation:**
-The linked list `1 -> 2 -> 2 -> 1` is a palindrome as it is symmetric.
-
-
+The linked list is a palindrome as it is symmetric.
 
 ### Example 3:
 
@@ -54,9 +51,7 @@ false
 ```
 
 **Explanation:**
-The linked list `1 -> 2 -> 3` is not a palindrome because 1 ≠ 3.
-
-
+The linked list is not a palindrome because 1 ≠ 3.
 
 ## Constraints:
 

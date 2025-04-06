@@ -1,26 +1,24 @@
-#include "../inc/util.hpp"
+#include "util.hpp"
 #include <vector>
 #include <iostream>
 
-// Function to merge two sorted linked lists
-LinkedList* mergeTwoLists(LinkedList* l1, LinkedList* l2) {
+LinkedList* merge_two_sorted_linked_list(LinkedList* list1, LinkedList* list2) {
     // Write your code here
-
-    return NULL;
+    return nullptr;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     
-    LinkedList *list1, *list2;
+    // Setup the linked lists
+    LinkedList* list1;
+    LinkedList* list2;
+    setup_question(argc, argv, &list1, &list2);
 
-    // Setup the linked list
-    setup_question(&list1, &list2);
+    // Call the user function to merge the two sorted linked lists
+    LinkedList* merged_list = merge_two_sorted_linked_list(list1, list2);
 
-    // User function to merge the linked lists
-    LinkedList* head = mergeTwoLists(list1, list2);
-
-    // Print the linked list
-    print_LinkedList(head);
+    // Print the merged linked list
+    print_LinkedList(merged_list);
 
     return 0;
 }

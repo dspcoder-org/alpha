@@ -14,7 +14,7 @@ public:
 
 // Function declarations
 
-void setup_question(LinkedList** list1, LinkedList** list2);
+void setup_question(int argc, char* argv[], LinkedList** list1, LinkedList** list2);
 void print_LinkedList(LinkedList* head);
 
 #endif // UTIL_H

@@ -11,7 +11,7 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern void setup_question(struct Linked_List** list1, struct Linked_List** list2);
+extern void setup_question(int argc, char* argv[], struct Linked_List** list1, struct Linked_List** list2);
 extern void print_LinkedList(struct Linked_List* head);
 
 #endif // UTIL_H

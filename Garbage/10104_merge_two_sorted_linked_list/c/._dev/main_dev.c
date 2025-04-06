@@ -8,65 +8,40 @@ struct Linked_List {
 };
 
 // Function prototypes
-extern void setup_question(struct Linked_List** list1, struct Linked_List** list2);
+extern void setup_question(int argc, char* argv[], struct Linked_List** list1, struct Linked_List** list2);
 extern void print_LinkedList(struct Linked_List* head);
 
-struct Linked_List* mergeTwoLists(struct Linked_List* l1, struct Linked_List* l2){
-    // give me solution below
-    struct Linked_List* head = NULL;
-    struct Linked_List* tail = NULL;
-    struct Linked_List* temp = NULL;    
+struct Linked_List* merge_two_sorted_linked_list(struct Linked_List* list1, struct Linked_List* list2) {
+    struct Linked_List dummy;
+    struct Linked_List* tail = &dummy;
+    dummy.next = NULL;
 
-    while(l1 != NULL && l2 != NULL){
-        if(l1->data < l2->data){
-            temp = l1;
-            l1 = l1->next;
-        }else{
-            temp = l2;
-            l2 = l2->next;
+    while (list1 && list2) {
+        if (list1->data < list2->data) {
+            tail->next = list1;
+            list1 = list1->next;
+        } else {
+            tail->next = list2;
+            list2 = list2->next;
         }
-        temp->next = NULL;
-        if(head == NULL){
-            head = temp;
-            tail = temp;
-        }else{
-            tail->next = temp;
-            tail = temp;
-        }
+        tail = tail->next;
     }
-
-    if(l1 != NULL){
-        if(head == NULL){
-            head = l1;
-        }else{
-            tail->next = l1;
-        }
-    }
-
-    if(l2 != NULL){
-        if(head == NULL){
-            head = l2;
-        }else{
-            tail->next = l2;
-        }
-    }
-
-    return head;
-
+    tail->next = list1 ? list1 : list2;
+    return dummy.next;
 }
 
-int main(){
+int main(int argc, char* argv[]) {
 
-    struct Linked_List *list1, *list2;
-
-    // Setup the linked list
-    setup_question(&list1, &list2);
-
-    // User function to merge the linked lists
-    struct Linked_List* head = mergeTwoLists(list1, list2);
+    // Setup the linked lists
+    struct Linked_List* list1;
+    struct Linked_List* list2;
+    setup_question(argc, argv, &list1, &list2);
     
-    // Print the linked list
-    print_LinkedList(head);
+    // User function to merge the two sorted linked lists
+    struct Linked_List* merged_list = merge_two_sorted_linked_list(list1, list2); 
+
+    // Print the merged linked list
+    print_LinkedList(merged_list);
     
     return 0;
 }

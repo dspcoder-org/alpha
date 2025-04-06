@@ -7,7 +7,7 @@ class generate:
     def __init__(self, base_question_path, description_path):
         self.claude_api_key = "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" #os.environ.get('API_KEY')
         self.anthropic = Anthropic(api_key=self.claude_api_key )
-        self.gpt_api_key = "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"
+        self.gpt_api_key = "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"
         self.deepseek_api_key = "sk-4d694e3879854ee58a63e54ee3ec8d27"
         self.model_to_use = "gpt"
         self.gpt = OpenAI(api_key = self.gpt_api_key)
@@ -26,28 +26,34 @@ class generate:
             - Contains utility functions
             - Incorporates the content of util.h (needed to compile as a standalone .a file)
             - Should not include a alogiritm implementation or function signature.
-            3. **main.c/cpp**: The file users will see and can edit on the platform. This file should:
+            3. **main.c/cpp**: The file users will see but cant edit on the platform. This file should:
+            - Include the main function
+            - Call the setup_question function from lib.c and user's solution function
+            4. **solution.c/cpp**: User will update this file:
             - Include a function signature where users will write their solution
             - Leave the implementation of this function empty for users to complete
-            4. **main_dev.c/cpp**: Similar to main.c but includes the correct solution for the problem. This file:
-            - Will be used to generate a binary for comparison testing
-            - Should directly incorporate util.h content rather than importing it
+            5. **main_dev.c/cpp**: Similar to main.c but Should directly incorporate util.h content rather than importing it:
+            - This file will be used to generate a binary for comparison testing
+            6 **solution_dev.c/cpp**: This file contains the correct solution implementation.
+            - This file will be used to generate a binary for comparison testing
             - Must contain the correct solution implementation
+            - Should directly incorporate util.h content rather than importing it
             5. **test.py**: 
             - This contains test cases used for testing user code. 
-            - generate 10 test cases covering edge cases, constraints, time and space complexity. 
+            - generate test cases covering edge cases, constraints, time and space complexity. 
             - self.RUN will always be 3.
             - Keep first 3 test cases length small and testing simple conditions.
+            - Make master test case with large inputs and complex conditions testing time and space complexity.
             6. **readme.md**: 
-            - Contains the problem description, input format, examples, and constraints only. 
+            - Contains the problem description, examples, and constraints only. 
             - Keep similar structure as original file
             7. **solution.md**: write following text in this file -> # Solutions will be added soon.
             8. **launch.json**: Configuration for launching/debugging. you only need to update args in the configurations which is argument used to run a.out executable. use argument from first test case
 
             ## Important Notes
             - Do not change the overall structure of these files as they are used in the backend.
-            - Users can only see and edit: main.c, lib.a (created using lib.c), and util.h.
-            - util.h is needed in lib.c or main_dev.c, copy its content directly rather than importing it.
+            - Users can only see and edit: main.c, solution.c, lib.a (created using lib.c), and util.h.
+            - util.h is needed in lib.c, main_dev.c or solution_dev.c, copy its content directly rather than importing it.
             - Make all necessary modifications to implement the new algorithm while preserving the existing file structure and relationships.
 
             ## Output Format Requirements
@@ -63,10 +69,18 @@ class generate:
             <main.c>
             // Raw code here without any markdown formatting  
             </main.c>
+            
+            <solution.c>
+            // Raw code here without any markdown formatting
+            </solution.c>
 
             <main_dev.c>
             // Raw code here without any markdown formatting
             </main_dev.c>
+            
+            <solution_dev.c>
+            // Raw code here without any markdown formatting
+            </solution_dev.c>
 
             <util.h>
             // Raw code here without any markdown formatting
@@ -80,9 +94,17 @@ class generate:
             // Raw code here without any markdown formatting
             </main.cpp>
             
+            <solution.cpp>
+            // Raw code here without any markdown formatting
+            </solution.cpp>
+            
             <main_dev.cpp>
             // Raw code here without any markdown formatting
             </main_dev.cpp>
+            
+            <solution_dev.cpp>
+            // Raw code here without any markdown formatting
+            </solution_dev.cpp>
             
             <util.hpp>
             // Raw code here without any markdown formatting
@@ -214,12 +236,20 @@ class generate:
                 file_path = f"{save_path}/c/src/main.c"
             elif filename == "main_dev.c":
                 file_path = f"{save_path}/c/._dev/main_dev.c"
+            elif filename == "solution.c":
+                file_path = f"{save_path}/c/src/solution.c"
+            elif filename == "solution_dev.c":
+                file_path = f"{save_path}/c/._dev/solution_dev.c"
             elif filename == "lib.c":
                 file_path = f"{save_path}/c/._dev/lib.c"
             elif filename == "util.h":
                 file_path = f"{save_path}/c/inc/util.h"
             elif filename == "main.cpp":
                 file_path = f"{save_path}/cpp/src/main.cpp"
+            elif filename == "solution.cpp":
+                file_path = f"{save_path}/cpp/src/solution.cpp"
+            elif filename == "solution_dev.cpp":
+                file_path = f"{save_path}/cpp/._dev/solution_dev.cpp"
             elif filename == "main_dev.cpp":
                 file_path = f"{save_path}/cpp/._dev/main_dev.cpp"
             elif filename == "lib.cpp":
@@ -247,12 +277,11 @@ class generate:
     def get_response_from_llm(self, ques_name, ques_description):
         # Get response from llm
         # create a context
-        self.system_context += self._read_code_files(["c", "cpp"], [["lib.c", "main.c", "main_dev.c", "util.h"], ["lib.cpp", "main.cpp", "main_dev.cpp", "util.hpp"] ])
+        self.system_context += self._read_code_files(["c", "cpp"], [["lib.c", "main.c", "main_dev.c", "util.h", "solution.c", "solution_dev.c"], ["lib.cpp", "main.cpp", "main_dev.cpp", "util.hpp", "solution.cpp", "solution_dev.cpp"] ])
         # Add question name and description
         ques_context = f"Question: {ques_name}  \n"
         ques_context += f"Description: {ques_description}  \n"
             
-        
         out = ""
         if self.model_to_use == "claude":
             # Make the API call

@@ -10,8 +10,12 @@ struct Linked_List {
     struct Linked_List* next;
 };
 
-// Function prototypes
+// Functions declared in libdspcoder.a
 extern struct Linked_List* setup_question(int argc, char* argv[]);
 extern void print_LinkedList(struct Linked_List* head);
+extern void free_LinkedList(struct Linked_List* head);
+
+// User functions
+extern void reverse_Linked_list(struct Linked_List** head);
 
 #endif // UTIL_H

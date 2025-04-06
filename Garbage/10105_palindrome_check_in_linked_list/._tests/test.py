@@ -6,91 +6,81 @@ class testCases:
         self.usage = 'prod'
         
     def test_case_1(self, timeout_window = 5, override = 0):
-        # Normal case: odd number of elements, palindrome
+        # Palindrome case: odd number of elements
         no_of_input_args = 5
-        numbers = [no_of_input_args]
         input = [1, 2, 3, 2, 1]
-        numbers.extend(input)
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
         expected_value = 'true'
         return numbers, expected_value
 
     def test_case_2(self, timeout_window = 5, override = 0):
-        # Normal case: even number of elements, palindrome
+        # Palindrome case: even number of elements
         no_of_input_args = 4
-        numbers = [no_of_input_args]
         input = [1, 2, 2, 1]
-        numbers.extend(input)
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
         expected_value = 'true'
         return numbers, expected_value
 
     def test_case_3(self, timeout_window = 5, override = 0):
-        # Normal case: odd number of elements, not a palindrome
+        # Non-palindrome case
         no_of_input_args = 3
-        numbers = [no_of_input_args]
         input = [1, 2, 3]
-        numbers.extend(input)
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
         expected_value = 'false'
         return numbers, expected_value
 
     def test_case_4(self, timeout_window = 5, override = 0):
         # Edge case: single element
         no_of_input_args = 1
-        numbers = [no_of_input_args]
         input = [42]
-        numbers.extend(input)
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
         expected_value = 'true'
         return numbers, expected_value
 
     def test_case_5(self, timeout_window = 5, override = 0):
-        # Edge case: two elements, palindrome
-        no_of_input_args = 2
-        numbers = [no_of_input_args]
-        input = [100, 100]
-        numbers.extend(input)
+        # Edge case: empty list
+        no_of_input_args = 0
+        input = []
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
         expected_value = 'true'
         return numbers, expected_value
 
     def test_case_6(self, timeout_window = 5, override = 0):
-        # Edge case: two elements, not a palindrome
-        no_of_input_args = 2
-        numbers = [no_of_input_args]
-        input = [100, 200]
-        numbers.extend(input)
-        expected_value = 'false'
+        # Palindrome with negative numbers
+        no_of_input_args = 5
+        input = [-1, -2, -3, -2, -1]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
         return numbers, expected_value
 
     def test_case_7(self, timeout_window = 5, override = 0):
-        # Edge case: empty list
-        no_of_input_args = 0
-        numbers = [no_of_input_args]
-        input = []
-        numbers.extend(input)
-        expected_value = 'true'
-        return numbers, expected_value
-
-    def test_case_8(self, timeout_window = 5, override = 0):
-        # Case with negative numbers, palindrome
-        no_of_input_args = 5
-        numbers = [no_of_input_args]
-        input = [-1, -2, -3, -2, -1]
-        numbers.extend(input)
-        expected_value = 'true'
-        return numbers, expected_value
-
-    def test_case_9(self, timeout_window = 5, override = 0):
-        # Case with negative numbers, not a palindrome
-        no_of_input_args = 5
-        numbers = [no_of_input_args]
-        input = [-1, -2, -3, -4, -5]
-        numbers.extend(input)
+        # Non-palindrome with mixed numbers
+        no_of_input_args = 6
+        input = [-1, 2, -3, 3, 2, 1]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
         expected_value = 'false'
         return numbers, expected_value
 
-    def test_case_10(self, timeout_window = 5, override = 0):
-        # List with two halves being mirror images, not a palindrome
+    def test_case_8(self, timeout_window = 5, override = 0):
+        # Palindrome with repeated numbers
         no_of_input_args = 6
-        numbers = [no_of_input_args]
-        input = [1, 2, 3, 4, 2, 1]
-        numbers.extend(input)
+        input = [1, 1, 1, 1, 1, 1]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_9(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
+        # Large palindrome list (10000 elements)
+        no_of_input_args = 10000
+        input = list(range(5000)) + list(range(5000)[::-1])
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_10(self, timeout_window = 5, override = 0):
+        # List with alternating max and min values
+        no_of_input_args = 10
+        input = [10000, -10000, 10000, -10000, 10000, -10000, 10000, -10000, 10000, -10000]
+        numbers = f"{no_of_input_args}\n{' '.join(map(str, input))}"
         expected_value = 'false'
         return numbers, expected_value

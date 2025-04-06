@@ -1,21 +1,17 @@
 #include "util.hpp"
-#include <vector>
-#include <iostream>
-
-void reverse_Linked_list(LinkedList** head) {
-    // Write your code here
-}
 
 int main(int argc, char* argv[]) {
-    
-    // Setup the linked list
+    // Initialize the linked list using setup_question
     LinkedList* head = setup_question(argc, argv);
 
-    // Call the user function to reverse the linked list
+    // Reverse the linked list using the user-defined function
     reverse_Linked_list(&head);
 
-    // Print the linked list
+    // Print the reversed linked list
     print_LinkedList(head);
+
+    // Free the memory allocated for the linked list
+    delete_LinkedList(head);
 
     return 0;
 }

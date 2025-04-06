@@ -60,10 +60,33 @@ class Question_handle:
         self.build.test_make_cpp()
         print("============= Done ============= \n")
     
+    def git_setup(self):
+        print("============= Git ============= ")
+        # print current dir
+        print(os.getcwd())
+        os.chdir(f"{self.question_path}/c")
+        if os.path.exists(".git"):
+            # remove .git folder
+            os.system("rm -rf .git")
+        os.system("git init")
+        os.system("git add Makefile inc/* lib/* src/*")
+        os.system("git commit --author='dspcoder <admin@dspcoder.com>' -m 'Base Code'")
+        os.system("git branch -M main")
+        
+        # print current dir
+        os.chdir(f"../cpp")
+        if os.path.exists(".git"):
+            # remove .git folder
+            os.system("rm -rf .git")
+        os.system("git init")
+        os.system("git add Makefile inc/* lib/* src/*")
+        os.system("git commit --author='dspcoder <admin@dspcoder.com>' -m 'Base Code'")
+        os.system("git branch -M main")
+    
     def run(self):
-        # context = ""
-        # context += "Input the number of elements for the both linked list in argument n"
-        # self.generate.generate_prompt("Intersection of Two Linked Lists", context)
+        context = ""
+        # context += "Input the number of elements for the both linked list in argument n. "
+        # self.generate.generate_prompt("LRU Cache", context)
         
         # self.generate.generate_question(ques_name, ques_description, id, self.ques_save_path)
         
@@ -83,19 +106,22 @@ class Question_handle:
         
         # self.test_make()
         
+        # self.git_setup()
+        
+        
         pass
     
 
 # Question details  
-ques_name = "intersection_of_two_linked_lists"
-id = "10109" 
+ques_name = "detect_cycle_in_linked_list"
+id = "10102" 
 ques_description = ""
 with open(f"./descriptions/{ques_name.lower().replace(' ', '_')}.txt", "r") as file:
     ques_description = file.read()
 
-ques_description += """
-    take all inputs in setup_question function as verify function is only available in lib.c and cant be imported 
-"""
+# ques_description += """
+#     take all inputs in setup_question function as verify function is only available in lib.c and cant be imported 
+# """
 
 
 if __name__ == "__main__":

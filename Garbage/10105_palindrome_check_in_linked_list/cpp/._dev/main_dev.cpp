@@ -11,11 +11,10 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question();
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
 
-bool isPalindrome(LinkedList* head) {
-    // Write your code here
+bool is_palindrome(LinkedList* head) {
     if (!head || !head->next) return true;
 
     LinkedList* slow = head;
@@ -26,10 +25,10 @@ bool isPalindrome(LinkedList* head) {
     // Find the middle of the linked list
     while (fast && fast->next) {
         fast = fast->next->next;
-        temp = slow->next;
-        slow->next = prev;
-        prev = slow;
-        slow = temp;
+        temp = slow;
+        slow = slow->next;
+        temp->next = prev;
+        prev = temp;
     }
 
     // If the number of nodes is odd, skip the middle node
@@ -38,22 +37,24 @@ bool isPalindrome(LinkedList* head) {
     }
 
     // Compare the two halves
-    while (slow) {
-        if (slow->data != prev->data) return false;
-        slow = slow->next;
+    while (prev && slow) {
+        if (prev->data != slow->data) {
+            return false;
+        }
         prev = prev->next;
+        slow = slow->next;
     }
 
     return true;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     
     // Setup the linked list
-    LinkedList* head = setup_question();
+    LinkedList* head = setup_question(argc, argv);
 
     // Call the user function to check if the linked list is a palindrome
-    bool result = isPalindrome(head);
+    bool result = is_palindrome(head);
 
     // Print the result
     std::cout << (result ? "true" : "false") << std::endl;

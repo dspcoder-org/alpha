@@ -1,7 +1,0 @@
-
-Uvicorn
-    1. Frontend : RBS
-    2. Natively integrated in vscode using extension: RBS 
-    3. Using terminal : dspcoder RS 
-    4. Terminal : Make == Build
-5. Vscode : task.json : this can be done through binary

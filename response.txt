@@ -1,3 +1,5 @@
+To implement the new algorithm for detecting a cycle in a linked list, we will modify the provided code files accordingly. Below is the complete code for each file:
+
 <lib.c>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,95 +21,101 @@ struct Linked_List {
     struct Linked_List* next;
 };
 
-// Function prototypes
-extern struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** headB);
-extern void print_Intersection(struct Linked_List* intersection);
+// Function declared in libdspcoder.a
+extern struct Linked_List* setup_question(int argc, char* argv[]);
+extern void print_LinkedList(struct Linked_List* head);
+
+// User function
+extern bool detect_cycle_in_linked_list(struct Linked_List* head);
 
 // end of util.h
 
-struct Linked_List* buildLinkedList(int arr[], int n){
-    
-    struct Linked_List* head = (struct Linked_List* ) malloc(sizeof(struct Linked_List));
+struct Linked_List* buildLinkedList(int arr[], int n, int pos) {
+    struct Linked_List* head = (struct Linked_List*)malloc(sizeof(struct Linked_List));
+    struct Linked_List* cycle_node = NULL;
 
-    if(n == 0){
-        return NULL; 
+    if (n == 0) {
+        return NULL;
     }
 
-    struct Linked_List* dummy_head = head; 
-    
-    for(int i = 0; i < n ; i++){
-        dummy_head->data = arr[i]; 
-        if (i != n-1){
-            dummy_head->next = (struct Linked_List* ) malloc(sizeof(struct Linked_List));
-            dummy_head = dummy_head->next; 
+    struct Linked_List* dummy_head = head;
+
+    for (int i = 0; i < n; i++) {
+        dummy_head->data = arr[i];
+        if (i == pos) {
+            cycle_node = dummy_head;
+        }
+        if (i != n - 1) {
+            dummy_head->next = (struct Linked_List*)malloc(sizeof(struct Linked_List));
+            dummy_head = dummy_head->next;
+        } else {
+            dummy_head->next = (pos == -1) ? NULL : cycle_node; // Create cycle if pos is not -1
         }
     }
 
-    return head; 
+    return head;
 }
 
-void print_Intersection(struct Linked_List* intersection){
-    if(intersection == NULL){
-        printf("null\n");
-    } else {
-        printf("%d\n", intersection->data);
+void print_LinkedList(struct Linked_List* head){
+    if(head == NULL){
+        printf(""); 
+    }
+
+    while (head) {
+        printf("%d", head->data);
+        if (head->next) {
+            printf(" ");
+        }
+        head = head->next;
+    }
+    printf("\n");
+}
+
+// Function to free the linked list
+void free_LinkedList(struct Linked_List* head) {
+    struct Linked_List* temp;
+    while (head) {
+        temp = head;
+        head = head->next;
+        free(temp);
     }
 }
 
-struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** headB) {
-
+struct Linked_List* setup_question(int argc, char* argv[]) {
     if (argc == 1) {
-        int n, m, temp;
-        
-        // Input the number of elements for the first list
-        VERIFY(((scanf("%d", &n)) > 0));
+        int n, pos, temp;
 
-        // Create an array to store the node values for the first list
-        int nodesA[n];
+        // Input the number of elements and position
+        VERIFY(((scanf("%d %d", &n, &pos)) > 0));
+        VERIFY(n >= 0); // Ensure n is non-negative
 
-        // Input the values into the array for the first list
+        // Create an array to store the node values
+        int nodes[n];
+
+        // Input the values into the array
         for (int i = 0; i < n; i++) {
-            VERIFY(((scanf("%d", &nodesA[i])) > 0));
-        }
-
-        // Input the number of elements for the second list
-        VERIFY(((scanf("%d", &m)) > 0));
-
-        // Create an array to store the node values for the second list
-        int nodesB[m];
-
-        // Input the values into the array for the second list
-        for (int i = 0; i < m; i++) {
-            VERIFY(((scanf("%d", &nodesB[i])) > 0));
+            VERIFY(((scanf("%d", &nodes[i])) > 0));
         }
 
         VERIFY(((scanf("%d", &temp)) == EOF));
 
-        // Build the linked lists
-        struct Linked_List* headA = buildLinkedList(nodesA, n);
-        *headB = buildLinkedList(nodesB, m);
+        // Build the linked list
+        struct Linked_List* head = buildLinkedList(nodes, n, pos);
 
-        return headA;
+        return head;
     } else {
         int n = atoi(argv[1]);
-        int nodesA[n];
+        int pos = atoi(argv[2]);
+        VERIFY(n >= 0); // Ensure n is non-negative
+
+        int nodes[n];
 
         for (int i = 0; i < n; i++) {
-            nodesA[i] = atoi(argv[i+2]);
+            nodes[i] = atoi(argv[i + 3]);
         }
+        struct Linked_List* head = buildLinkedList(nodes, n, pos);
 
-        int m = atoi(argv[n+2]);
-        int nodesB[m];
-
-        for (int i = 0; i < m; i++) {
-            nodesB[i] = atoi(argv[n+3+i]);
-        }
-
-        // Build the linked lists
-        struct Linked_List* headA = buildLinkedList(nodesA, n);
-        *headB = buildLinkedList(nodesB, m);
-
-        return headA;
+        return head;
     }
 }
 </lib.c>
@@ -115,28 +123,34 @@ struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** 
 <main.c>
 #include "util.h"
 
-struct Linked_List* getIntersectionNode(struct Linked_List* headA, struct Linked_List* headB) {
-    // Write your code here
-    return NULL;
-}
-
 int main(int argc, char* argv[]) {
 
-    // Setup the linked lists
-    struct Linked_List* headB;
-    struct Linked_List* headA = setup_question(argc, argv, &headB);
+    // Setup the linked list
+    struct Linked_List* head = setup_question(argc, argv);
     
-    // User function to find the intersection node
-    struct Linked_List* intersection = getIntersectionNode(headA, headB); 
+    // User function to detect cycle in the linked list
+    bool has_cycle = detect_cycle_in_linked_list(head); 
 
-    // Print the intersection node
-    print_Intersection(intersection);
+    // Print the result
+    printf("%s\n", has_cycle ? "true" : "false");
+
+    // Free the linked list to prevent memory leaks
+    free_LinkedList(head);
     
     return 0;
 }
 </main.c>
 
+<solution.c>
+#include "util.h"
+
+bool detect_cycle_in_linked_list(struct Linked_List* head) {
+    // Write your code here
+}
+</solution.c>
+
 <main_dev.c>
+// util.h
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -146,39 +160,68 @@ struct Linked_List {
     struct Linked_List* next;
 };
 
-// Function prototypes
-extern struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** headB);
-extern void print_Intersection(struct Linked_List* intersection);
+// Function declared in libdspcoder.a
+extern struct Linked_List* setup_question(int argc, char* argv[]);
+extern void print_LinkedList(struct Linked_List* head);
+extern void free_LinkedList(struct Linked_List* head);
 
-struct Linked_List* getIntersectionNode(struct Linked_List* headA, struct Linked_List* headB) {
-    if (!headA || !headB) return NULL;
-
-    struct Linked_List* a = headA;
-    struct Linked_List* b = headB;
-
-    while (a != b) {
-        a = a ? a->next : headB;
-        b = b ? b->next : headA;
-    }
-
-    return a;
-}
+// User function
+extern bool detect_cycle_in_linked_list(struct Linked_List* head);
 
 int main(int argc, char* argv[]) {
-
-    // Setup the linked lists
-    struct Linked_List* headB;
-    struct Linked_List* headA = setup_question(argc, argv, &headB);
+    // Setup the linked list
+    struct Linked_List* head = setup_question(argc, argv);
     
-    // User function to find the intersection node
-    struct Linked_List* intersection = getIntersectionNode(headA, headB); 
+    // User function to detect cycle in the linked list
+    bool has_cycle = detect_cycle_in_linked_list(head); 
 
-    // Print the intersection node
-    print_Intersection(intersection);
+    // Print the result
+    printf("%s\n", has_cycle ? "true" : "false");
+
+    // Free the linked list to prevent memory leaks
+    free_LinkedList(head);
     
     return 0;
 }
 </main_dev.c>
+
+<solution_dev.c>
+// util.h start
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+struct Linked_List {
+    int data;
+    struct Linked_List* next;
+};
+
+// Functions declared in libdspcoder.a
+extern struct Linked_List* setup_question(int argc, char* argv[]);
+extern void print_LinkedList(struct Linked_List* head);
+extern void free_LinkedList(struct Linked_List* head);
+
+// User functions
+extern bool detect_cycle_in_linked_list(struct Linked_List* head);
+
+// util.h end
+
+// Function to detect a cycle in a linked list
+bool detect_cycle_in_linked_list(struct Linked_List* head) {
+    struct Linked_List* slow = head;
+    struct Linked_List* fast = head;
+
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast) {
+            return true; // Cycle detected
+        }
+    }
+    return false; // No cycle
+}
+</solution_dev.c>
 
 <util.h>
 #ifndef UTIL_H
@@ -193,9 +236,13 @@ struct Linked_List {
     struct Linked_List* next;
 };
 
-// Function prototypes
-extern struct Linked_List* setup_question(int argc, char* argv[], struct Linked_List** headB);
-extern void print_Intersection(struct Linked_List* intersection);
+// Functions declared in libdspcoder.a
+extern struct Linked_List* setup_question(int argc, char* argv[]);
+extern void print_LinkedList(struct Linked_List* head);
+extern void free_LinkedList(struct Linked_List* head);
+
+// User functions
+extern bool detect_cycle_in_linked_list(struct Linked_List* head);
 
 #endif // UTIL_H
 </util.h>
@@ -210,175 +257,222 @@ extern void print_Intersection(struct Linked_List* intersection);
         exit(0);               \
     }
 
-// Copy content of util.hpp
+// Util.h
+#include <iostream>
+#include <vector>
+
 class LinkedList {
 public:
     int data;
     LinkedList* next;
-
     LinkedList(int val) : data(val), next(nullptr) {}
 };
 
-// Function declarations
+// Function declared in libdspcoder.a
+LinkedList* setup_question(int argc, char* argv[]);
+void print_LinkedList(LinkedList* head);
 
-LinkedList* setup_question(int argc, char* argv[], LinkedList** headB);
-void print_Intersection(LinkedList* intersection);
+// User function
+bool detect_cycle_in_linked_list(LinkedList* head);
+
+// Util.h end
 
 // Function to build a linked list from an array
-LinkedList* buildLinkedList(int arr[], int n) {
+LinkedList* buildLinkedList(int arr[], int n, int pos) {
     if (n == 0) {
         return nullptr;
     }
 
     LinkedList* head = new LinkedList(arr[0]);
     LinkedList* dummy_head = head;
+    LinkedList* cycle_node = nullptr;
 
     for (int i = 1; i < n; ++i) {
         dummy_head->next = new LinkedList(arr[i]);
         dummy_head = dummy_head->next;
+        if (i == pos) {
+            cycle_node = dummy_head;
+        }
+    }
+
+    if (pos != -1) {
+        dummy_head->next = cycle_node; // Create cycle if pos is not -1
     }
 
     return head;
 }
 
-// Function to print the intersection node
-void print_Intersection(LinkedList* intersection) {
-    if (!intersection) {
-        std::cout << "null\n";
-    } else {
-        std::cout << intersection->data << "\n";
+// Function to print the linked list
+void print_LinkedList(LinkedList* head) {
+    if (!head) {
+        return;
+    }
+
+    while (head) {
+        std::cout << head->data;
+        if (head->next) {
+            std::cout << " ";
+        }
+        head = head->next;
+    }
+    std::cout << std::endl;
+}
+
+// Function to delete the linked list
+void delete_LinkedList(LinkedList* head) {
+    while (head) {
+        LinkedList* temp = head;
+        head = head->next;
+        delete temp;
     }
 }
 
-LinkedList* setup_question(int argc, char* argv[], LinkedList** headB) {
+LinkedList* setup_question(int argc, char* argv[]) {
 
     if (argc == 1) {
-        // Input the number of elements for the first list
-        int n, m, temp;
-        VERIFY((std::cin >> n));
+        // Input the number of elements and position
+        int n, pos, temp;
+        VERIFY((std::cin >> n >> pos));
 
-        // Dynamically allocate an array to store the node values for the first list
-        int* nodesA = new int[n];
+        // Dynamically allocate an array to store the node values
+        int* nodes = new int[n];
 
-        // Input the values into the array for the first list
+        // Input the values into the array
         for (int i = 0; i < n; i++) {
-            VERIFY((std::cin >> nodesA[i]));
+            VERIFY((std::cin >> nodes[i]));
         }
-
-        // Input the number of elements for the second list
-        VERIFY((std::cin >> m));
-
-        // Dynamically allocate an array to store the node values for the second list
-        int* nodesB = new int[m];
-
-        // Input the values into the array for the second list
-        for (int i = 0; i < m; i++) {
-            VERIFY((std::cin >> nodesB[i]));
-        }
-
         // Check if there are any extra inputs
+        // If there are, then the input is invalid
         VERIFY((std::cin >> temp).fail() == true);
 
-        // Build the linked lists
-        LinkedList* headA = buildLinkedList(nodesA, n);
-        *headB = buildLinkedList(nodesB, m);
+        // Build the linked list
+        LinkedList* head = buildLinkedList(nodes, n, pos);
+        delete[] nodes; // Free allocated memory
 
-        return headA;
+        return head;
     }
     else {
         int n = std::stoi(argv[1]);
-        int* nodesA = new int[n];
+        int pos = std::stoi(argv[2]);
+        int* nodes = new int[n];
         for (int i = 0; i < n; i++) {
-            nodesA[i] = std::stoi(argv[i + 2]);
+            nodes[i] = std::stoi(argv[i + 3]);
         }
+        LinkedList* head = buildLinkedList(nodes, n, pos);
+        delete[] nodes; // Free allocated memory
 
-        int m = std::stoi(argv[n + 2]);
-        int* nodesB = new int[m];
-        for (int i = 0; i < m; i++) {
-            nodesB[i] = std::stoi(argv[n + 3 + i]);
-        }
-
-        // Build the linked lists
-        LinkedList* headA = buildLinkedList(nodesA, n);
-        *headB = buildLinkedList(nodesB, m);
-
-        return headA;
+        return head;
     }
 }
 </lib.cpp>
 
 <main.cpp>
 #include "util.hpp"
-#include <vector>
-#include <iostream>
-
-LinkedList* getIntersectionNode(LinkedList* headA, LinkedList* headB) {
-    // Write your code here
-    return nullptr;
-}
 
 int main(int argc, char* argv[]) {
-    
-    // Setup the linked lists
-    LinkedList* headB;
-    LinkedList* headA = setup_question(argc, argv, &headB);
+    // Initialize the linked list using setup_question
+    LinkedList* head = setup_question(argc, argv);
 
-    // Call the user function to find the intersection node
-    LinkedList* intersection = getIntersectionNode(headA, headB);
+    // Detect cycle in the linked list using the user-defined function
+    bool has_cycle = detect_cycle_in_linked_list(head);
 
-    // Print the intersection node
-    print_Intersection(intersection);
+    // Print the result
+    std::cout << (has_cycle ? "true" : "false") << std::endl;
+
+    // Free the memory allocated for the linked list
+    delete_LinkedList(head);
 
     return 0;
 }
 </main.cpp>
 
+<solution.cpp>
+#include "util.hpp"
+
+bool detect_cycle_in_linked_list(LinkedList* head) {
+    // Write your code here
+}
+</solution.cpp>
+
 <main_dev.cpp>
-#include <vector>
+// Util.h
 #include <iostream>
+#include <vector>
 
 class LinkedList {
 public:
     int data;
     LinkedList* next;
-
     LinkedList(int val) : data(val), next(nullptr) {}
 };
 
-// Function declarations
+// Function declared in libdspcoder.a
+LinkedList* setup_question(int argc, char* argv[]);
+void print_LinkedList(LinkedList* head);
+void delete_LinkedList(LinkedList* head);
 
-LinkedList* setup_question(int argc, char* argv[], LinkedList** headB);
-void print_Intersection(LinkedList* intersection);
+// User function
+bool detect_cycle_in_linked_list(LinkedList* head);
 
-LinkedList* getIntersectionNode(LinkedList* headA, LinkedList* headB) {
-    if (!headA || !headB) return nullptr;
+// Util.h end
 
-    LinkedList* a = headA;
-    LinkedList* b = headB;
-
-    while (a != b) {
-        a = a ? a->next : headB;
-        b = b ? b->next : headA;
-    }
-
-    return a;
-}
 
 int main(int argc, char* argv[]) {
     
-    // Setup the linked lists
-    LinkedList* headB;
-    LinkedList* headA = setup_question(argc, argv, &headB);
+    // Setup the linked list
+    LinkedList* head = setup_question(argc, argv);
 
-    // Call the user function to find the intersection node
-    LinkedList* intersection = getIntersectionNode(headA, headB);
+    // Call the user function to detect cycle in the linked list
+    bool has_cycle = detect_cycle_in_linked_list(head);
 
-    // Print the intersection node
-    print_Intersection(intersection);
+    // Print the result
+    std::cout << (has_cycle ? "true" : "false") << std::endl;
+
+    // Free the memory allocated for the linked list
+    delete_LinkedList(head);
 
     return 0;
 }
 </main_dev.cpp>
+
+<solution_dev.cpp>
+// Util.h
+#include <iostream>
+#include <vector>
+
+// LinkedList class definition
+class LinkedList {
+public:
+    int data;
+    LinkedList* next;
+    LinkedList(int val) : data(val), next(nullptr) {}
+};
+
+// Functions declared in libdspcoder.a
+LinkedList* setup_question(int argc, char* argv[]);
+void print_LinkedList(LinkedList* head);
+void delete_LinkedList(LinkedList* head);
+
+// User-defined function to detect a cycle in a linked list
+bool detect_cycle_in_linked_list(LinkedList* head);
+
+// Util.h end
+
+bool detect_cycle_in_linked_list(LinkedList* head) {
+    LinkedList* slow = head;
+    LinkedList* fast = head;
+
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast) {
+            return true; // Cycle detected
+        }
+    }
+    return false; // No cycle
+}
+</solution_dev.cpp>
 
 <util.hpp>
 #ifndef UTIL_H
@@ -387,18 +481,21 @@ int main(int argc, char* argv[]) {
 #include <iostream>
 #include <vector>
 
+// LinkedList class definition
 class LinkedList {
 public:
     int data;
     LinkedList* next;
-
     LinkedList(int val) : data(val), next(nullptr) {}
 };
 
-// Function declarations
+// Functions declared in libdspcoder.a
+LinkedList* setup_question(int argc, char* argv[]);
+void print_LinkedList(LinkedList* head);
+void delete_LinkedList(LinkedList* head);
 
-LinkedList* setup_question(int argc, char* argv[], LinkedList** headB);
-void print_Intersection(LinkedList* intersection);
+// User-defined function
+bool detect_cycle_in_linked_list(LinkedList* head);
 
 #endif // UTIL_H
 </util.hpp>
@@ -406,15 +503,11 @@ void print_Intersection(LinkedList* intersection);
 <readme.md>
 ## Problem Description
 
-Given the heads of two singly linked lists, write a function to find the node at which the two linked lists intersect. If the two linked lists have no intersection, return null.
+Given the head of a singly linked list, write a function to detect if the linked list contains a cycle. If a cycle is present, return true; otherwise, return false.
 
 ## Input Format
 
-The input consists of three lines:
-1. The first line contains an integer n, the number of nodes in the first linked list.
-2. The second line contains n space-separated integers, representing the values of the nodes in the first linked list.
-3. The third line contains an integer m, the number of nodes in the second linked list.
-4. The fourth line contains m space-separated integers, representing the values of the nodes in the second linked list.
+The input consists of two lines. The first line contains two space-separated integers n and pos, where n is the number of nodes in the linked list and pos is the index (0-indexed) of the node where the tail connects to. The second line contains n space-separated integers, the values of the nodes in the linked list.
 
 ## Examples
 
@@ -422,61 +515,54 @@ The input consists of three lines:
 
 **Input:**
 ```
-5
-4 1 8 4 5
-4
-5 6 1 8 4 5
+4 1
+1 2 3 4
 ```
 
 **Output:**
 ```
-8
+true
 ```
 
 **Explanation:**
-The two linked lists intersect at node with value 8.
+The linked list has a cycle because the last node (4) points back to the node at index 1 (value 2).
 
 ### Example 2:
 
 **Input:**
 ```
-2
-1 9
-3
-3 2 4
+5 0
+3 -3 4 0 2
 ```
 
 **Output:**
 ```
-null
+true
 ```
 
 **Explanation:**
-The two linked lists do not intersect.
+The last node (value 2) links back to the head node, forming a cycle.
 
 ### Example 3:
 
 **Input:**
 ```
-3
-2 6 4
-3
-1 5
+3 -1
+2 0 1
 ```
 
 **Output:**
 ```
-null
+false
 ```
 
 **Explanation:**
-The two linked lists do not intersect.
+The linked list does not have a cycle, as there is no node linking back to a previous node.
 
-## Constraints:
+## Constraints
 
-1. The number of nodes in each list is in the range `[0, 10,000]`.
-2. Each node's value satisfies `-100,000 ≤ Node.val ≤ 100,000`.
-3. The lists may intersect at a single node, and the intersection is defined based on reference, not value.
+1. The number of nodes in the list is in the range [0, 10⁴].
+2. -10⁵ ≤ Node.val ≤ 10⁵
 </readme.md>
 
 <solution.md>
@@ -490,105 +576,226 @@ class testCases:
         self.exe = koro_exe
         self.default_timeout_window = 10
         self.usage = 'prod'
-        
-    def test_case_1(self, timeout_window = 5, override = 0):
-        # Normal case: intersection at a middle node
-        no_of_input_args_A = 5
-        input_A = [4, 1, 8, 4, 5]
-        no_of_input_args_B = 4
-        input_B = [5, 6, 1, 8, 4, 5]
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = '8'
+
+    # Added comments to explain the purpose of each test case
+    def test_case_1(self, timeout_window=5, override=0):
+        # Normal case: cycle present
+        no_of_input_args = 4
+        pos = 1
+        input = [1, 2, 3, 4]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
         return numbers, expected_value
 
-    def test_case_2(self, timeout_window = 5, override = 0):
-        # Normal case: no intersection
-        no_of_input_args_A = 2
-        input_A = [1, 9]
-        no_of_input_args_B = 3
-        input_B = [3, 2, 4]
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = 'null'
+    def test_case_2(self, timeout_window=5, override=0):
+        # Normal case: cycle present at head
+        no_of_input_args = 5
+        pos = 0
+        input = [3, -3, 4, 0, 2]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
         return numbers, expected_value
 
-    def test_case_3(self, timeout_window = 5, override = 0):
-        # Edge case: both lists are empty
-        no_of_input_args_A = 0
-        input_A = []
-        no_of_input_args_B = 0
-        input_B = []
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = 'null'
+    def test_case_3(self, timeout_window=5, override=0):
+        # Edge case: no cycle
+        no_of_input_args = 3
+        pos = -1
+        input = [2, 0, 1]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
         return numbers, expected_value
 
-    def test_case_4(self, timeout_window = 5, override = 0):
-        # Edge case: one list is empty
-        no_of_input_args_A = 3
-        input_A = [2, 6, 4]
-        no_of_input_args_B = 0
-        input_B = []
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = 'null'
+    def test_case_4(self, timeout_window=5, override=0):
+        # Edge case: single node, no cycle
+        no_of_input_args = 1
+        pos = -1
+        input = [42]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
         return numbers, expected_value
 
-    def test_case_5(self, timeout_window = 5, override = 0):
-        # Edge case: intersection at the first node
-        no_of_input_args_A = 3
-        input_A = [1, 2, 3]
-        no_of_input_args_B = 3
-        input_B = [1, 2, 3]
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = '1'
+    def test_case_5(self, timeout_window=5, override=0):
+        # Edge case: single node, cycle to itself
+        no_of_input_args = 1
+        pos = 0
+        input = [42]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
         return numbers, expected_value
 
-    def test_case_6(self, timeout_window = 5, override = 0):
-        # Case with negative numbers
-        no_of_input_args_A = 4
-        input_A = [-9999, -7777, -5555, -3333]
-        no_of_input_args_B = 4
-        input_B = [-9999, -7777, -5555, -3333]
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = '-9999'
+    def test_case_6(self, timeout_window=5, override=0):
+        # Case with negative numbers, cycle present
+        no_of_input_args = 4
+        pos = 2
+        input = [-9999, -7777, -5555, -3333]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
         return numbers, expected_value
 
-    def test_case_7(self, timeout_window = 5, override = 0):
-        # Case with mixed positive and negative numbers
-        no_of_input_args_A = 5
-        input_A = [-10000, 0, 5555, -9999, 2222]
-        no_of_input_args_B = 5
-        input_B = [5555, -9999, 2222, -1111, 10000]
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = '5555'
+    def test_case_7(self, timeout_window=5, override=0):
+        # Case with mixed positive and negative numbers, no cycle
+        no_of_input_args = 7
+        pos = -1
+        input = [-10000, 0, 5555, -9999, 2222, -1111, 10000]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
         return numbers, expected_value
 
-    def test_case_8(self, timeout_window = 5, override = 0):
-        # Case with repeated numbers
-        no_of_input_args_A = 6
-        input_A = [9999, 9999, -9999, -9999, 0, 0]
-        no_of_input_args_B = 6
-        input_B = [9999, 9999, -9999, -9999, 0, 0]
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = '9999'
+    def test_case_8(self, timeout_window=5, override=0):
+        # Case with repeated numbers, cycle present
+        no_of_input_args = 6
+        pos = 3
+        input = [9999, 9999, -9999, -9999, 0, 0]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
         return numbers, expected_value
 
-    def test_case_9(self, timeout_window = 15, override = 0):  # Increased timeout_window for larger input
-        # Large list (10000 elements)
-        no_of_input_args_A = 10000
-        input_A = list(range(-5000, 5000))
-        no_of_input_args_B = 10000
-        input_B = list(range(-5000, 5000))
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = '-5000'
+    def test_case_9(self, timeout_window=15, override=0):
+        # Large list (10,000 elements), no cycle
+        no_of_input_args = 10000
+        pos = -1
+        input = list(range(-5000, 5000))
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
         return numbers, expected_value
 
-    def test_case_10(self, timeout_window = 5, override = 0):
-        # List with alternating max and min values
-        no_of_input_args_A = 10
-        input_A = [10000, -10000] * 5
-        no_of_input_args_B = 10
-        input_B = [10000, -10000] * 5
-        numbers = f"{no_of_input_args_A}\n{' '.join(map(str, input_A))}\n{no_of_input_args_B}\n{' '.join(map(str, input_B))}"
-        expected_value = '10000'
+    def test_case_10(self, timeout_window=5, override=0):
+        # List with alternating max and min values, cycle present
+        no_of_input_args = 10
+        pos = 5
+        input = [10000, -10000] * 5
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_11(self, timeout_window=5, override=0):
+        # List with all elements the same, no cycle
+        no_of_input_args = 5
+        pos = -1
+        input = [7, 7, 7, 7, 7]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_12(self, timeout_window=5, override=0):
+        # List with increasing sequence, cycle present
+        no_of_input_args = 5
+        pos = 2
+        input = [1, 2, 3, 4, 5]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_13(self, timeout_window=5, override=0):
+        # List with decreasing sequence, no cycle
+        no_of_input_args = 5
+        pos = -1
+        input = [5, 4, 3, 2, 1]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_14(self, timeout_window=5, override=0):
+        # List with alternating positive and negative numbers, cycle present
+        no_of_input_args = 6
+        pos = 1
+        input = [-1, 1, -2, 2, -3, 3]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_15(self, timeout_window=5, override=0):
+        # List with zeros, no cycle
+        no_of_input_args = 4
+        pos = -1
+        input = [0, 0, 0, 0]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_16(self, timeout_window=5, override=0):
+        # List with large positive numbers, cycle present
+        no_of_input_args = 3
+        pos = 0
+        input = [99999, 88888, 77777]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_17(self, timeout_window=5, override=0):
+        # List with large negative numbers, no cycle
+        no_of_input_args = 3
+        pos = -1
+        input = [-99999, -88888, -77777]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_18(self, timeout_window=5, override=0):
+        # List with alternating large positive and negative numbers, cycle present
+        no_of_input_args = 4
+        pos = 2
+        input = [99999, -99999, 88888, -88888]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_19(self, timeout_window=5, override=0):
+        # List with a mix of small and large numbers, no cycle
+        no_of_input_args = 5
+        pos = -1
+        input = [1, 10000, -1, -10000, 0]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_20(self, timeout_window=5, override=0):
+        # List with a single large number, cycle to itself
+        no_of_input_args = 1
+        pos = 0
+        input = [100000]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_21(self, timeout_window=5, override=0):
+        # Edge case: list with only zeros, no cycle
+        no_of_input_args = 5
+        pos = -1
+        input = [0, 0, 0, 0, 0]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_22(self, timeout_window=5, override=0):
+        # Edge case: list with alternating large positive and small negative numbers, cycle present
+        no_of_input_args = 6
+        pos = 4
+        input = [100000, -1, 99999, -2, 88888, -3]
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
+        return numbers, expected_value
+
+    def test_case_23(self, timeout_window=5, override=0):
+        # Edge case: list with maximum and minimum integer values, no cycle
+        no_of_input_args = 2
+        pos = -1
+        input = [2147483647, -2147483648]  # Max and min 32-bit signed integers
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'false'
+        return numbers, expected_value
+
+    def test_case_master(self, timeout_window=5, override=0):
+        # Master test case
+        # This test case is designed to be a bit more complex and larger than the others.
+        # Checking the performance of the function with a larger input size given in readme     
+        # 1. The number of nodes in the list is in the range `[0, 10,000]`.
+        # 2. Each node's value satisfies `-10⁵ ≤ Node.val ≤ 10⁵`.
+        no_of_input_args = 10000
+        pos = 5000
+        input = list(range(-5000, 5000))
+        numbers = f"{no_of_input_args} {pos}\n{' '.join(map(str, input))}"
+        expected_value = 'true'
         return numbers, expected_value
 </test.py>
 
@@ -614,19 +821,12 @@ class testCases:
             ],
             // Add debug arguments (refer test cases in dspcoder panel)
             "args": [
-                "5",
                 "4",
                 "1",
-                "8",
-                "4",
-                "5",
-                "4",
-                "5",
-                "6",
                 "1",
-                "8",
-                "4",
-                "5"
+                "2",
+                "3",
+                "4"
             ],
             "preLaunchTask": "build"
         }

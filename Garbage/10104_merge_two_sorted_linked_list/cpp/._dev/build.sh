@@ -17,7 +17,7 @@ OBJ_FILE="${LIB_DIR}/libdspcoder.o"
 
 # Compiler settings
 CC="g++"
-CFLAGS="-Wall -fPIC -Wno-format-zero-length -std=c++20"
+CFLAGS="-Wall -fPIC -Wno-format-zero-length -std=c++20 -g"
 
 # Function to build library
 build_lib() {

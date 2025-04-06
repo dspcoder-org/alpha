@@ -1,7 +1,6 @@
 #include <vector>
 #include <iostream>
 
-
 class LinkedList {
 public:
     int data;
@@ -12,35 +11,31 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question();
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
 
-int find_middle_elem(LinkedList* head) {
-    // Write your code here
-    if (head == nullptr)
-        return -1;
-    
-    LinkedList* slow_ptr = head;
-    LinkedList* fast_ptr = head;
-    
-    while (fast_ptr != nullptr && fast_ptr->next != nullptr) {
-        slow_ptr = slow_ptr->next;
-        fast_ptr = fast_ptr->next->next;
+int find_middle_element(LinkedList* head) {
+    LinkedList* slow = head;
+    LinkedList* fast = head;
+
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
     }
-    
-    return slow_ptr->data;
+
+    return slow->data;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     
     // Setup the linked list
-    LinkedList* head = setup_question();
+    LinkedList* head = setup_question(argc, argv);
 
-    // Call the user function to find the middle element of the linked list
-    int middle_elem = find_middle_elem(head);
+    // Call the user function to find the middle element
+    int middle = find_middle_element(head);
 
     // Print the middle element
-    std::cout << middle_elem << std::endl;
+    std::cout << middle << std::endl;
 
     return 0;
 }

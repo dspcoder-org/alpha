@@ -18,10 +18,8 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question();
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
-
-
 
 // Function to build a linked list from an array
 LinkedList* buildLinkedList(int arr[], int n) {
@@ -56,26 +54,38 @@ void print_LinkedList(LinkedList* head) {
     std::cout << std::endl;
 }
 
-LinkedList* setup_question() {
-    
-    // Input the number of elements
-    int n, temp;
-    // Input the number of elements
-    VERIFY((std::cin >> n));
+LinkedList* setup_question(int argc, char* argv[]) {
 
-    // Dynamically allocate an array to store the node values
-    int* nodes = new int[n];
+    if (argc == 1) {
+        // Input the number of elements
+        int n, temp;
+        // Input the number of elements
+        VERIFY((std::cin >> n));
 
-    // Input the values into the array
-    for (int i = 0; i < n; i++) {
-        VERIFY((std::cin >> nodes[i]));
+        // Dynamically allocate an array to store the node values
+        int* nodes = new int[n];
+
+        // Input the values into the array
+        for (int i = 0; i < n; i++) {
+            VERIFY((std::cin >> nodes[i]));
+        }
+        // Check if there are any extra inputs
+        // If there are, then the input is invalid
+        VERIFY((std::cin >> temp).fail() == true);
+
+        // Build the linked list
+        LinkedList* head = buildLinkedList(nodes, n);
+
+        return head;
     }
-    // Check if there are any extra inputs
-    // If there are, then the input is invalid
-    VERIFY((std::cin >> temp).fail() == true);
+    else {
+        int n = std::stoi(argv[1]);
+        int* nodes = new int[n];
+        for (int i = 0; i < n; i++) {
+            nodes[i] = std::stoi(argv[i + 2]);
+        }
+        LinkedList* head = buildLinkedList(nodes, n);
 
-    // Build the linked list
-    LinkedList* head = buildLinkedList(nodes, n);
-
-    return head;
+        return head;
+    }
 }

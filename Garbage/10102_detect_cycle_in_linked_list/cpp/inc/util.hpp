@@ -14,7 +14,7 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question();
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
 
 #endif // UTIL_H

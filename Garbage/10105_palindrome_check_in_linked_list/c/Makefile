@@ -11,7 +11,7 @@ EXEC = $(EXE_DIR)/a.out
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -fPIC -Wno-return-type     # Flags for the compiler
+CFLAGS = -Wall -fPIC -Wno-return-type -g     # Flags for the compiler
 INCLUDES = -I$(INC_DIR)  # Include directories
 
 # Default target

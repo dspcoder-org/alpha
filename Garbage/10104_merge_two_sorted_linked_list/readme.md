@@ -1,6 +1,6 @@
 ## Problem Description
 
-Given the heads of two sorted singly linked lists, your task is to merge the two lists into a single sorted linked list.
+Given two sorted linked lists, write a function to merge them into a single sorted linked list. The new list should be made by splicing together the nodes of the first two lists.
 
 ## Examples
 
@@ -8,9 +8,7 @@ Given the heads of two sorted singly linked lists, your task is to merge the two
 
 **Input:**
 ```
-3
 1 2 4
-3
 1 3 4
 ```
 
@@ -20,50 +18,42 @@ Given the heads of two sorted singly linked lists, your task is to merge the two
 ```
 
 **Explanation:**
-The linked lists `1 -> 2 -> 4` and `1 -> 3 -> 4` are merged to `1 -> 1 -> 2 -> 3 -> 4 -> 4`.
-
-
+Merge the two sorted lists by comparing and ordering the nodes.
 
 ### Example 2:
 
 **Input:**
 ```
-2
-1 3
-3
-2 4 5
+0 3 6
+1 2 5
 ```
 
 **Output:**
 ```
-1 2 3 4 5
+0 1 2 3 5 6
 ```
 
 **Explanation:**
-The linked lists `1 -> 3` and `2 -> 4 -> 5` are merged to `1 -> 2 -> 3 -> 4 -> 5`.
-
-
+Merge the two sorted lists maintaining the sorted order.
 
 ### Example 3:
 
 **Input:**
 ```
-0
-
-0
+[]
+0 1 2
 ```
 
 **Output:**
 ```
-""
+0 1 2
 ```
 
 **Explanation:**
-Two empty linked lists remain empty after merging.
-
-
+If one list is empty, return the other list.
 
 ## Constraints:
 
-1. The number of nodes in each list is in the range `[0, 10,000]`.
-2. Each node's value satisfies `-10,000 ≤ Node.val ≤ 10,000`.
+1. The number of nodes in each list is in the range `[0, 50]`.
+2. Each node's value satisfies `-10⁵ ≤ Node.val ≤ 10⁵`.
+3. Both input lists are sorted in non-decreasing order.

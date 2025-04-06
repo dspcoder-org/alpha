@@ -18,10 +18,8 @@ public:
 
 // Function declarations
 
-LinkedList* setup_question();
+LinkedList* setup_question(int argc, char* argv[]);
 void print_LinkedList(LinkedList* head);
-
-
 
 // Function to build a linked list from an array
 LinkedList* buildLinkedList(int arr[], int n, int pos) {
@@ -31,19 +29,18 @@ LinkedList* buildLinkedList(int arr[], int n, int pos) {
 
     LinkedList* head = new LinkedList(arr[0]);
     LinkedList* dummy_head = head;
+    LinkedList* cycle_node = nullptr;
 
     for (int i = 1; i < n; ++i) {
         dummy_head->next = new LinkedList(arr[i]);
         dummy_head = dummy_head->next;
+        if (i == pos) {
+            cycle_node = dummy_head;
+        }
     }
 
-    // Create cycle if pos is valid
-    if (pos >= 0 && pos < n) {
-        LinkedList* cycleNode = head;
-        for (int i = 0; i < pos; i++) {
-            cycleNode = cycleNode->next;
-        }
-        dummy_head->next = cycleNode;
+    if (pos != -1) {
+        dummy_head->next = cycle_node;
     }
 
     return head;
@@ -65,25 +62,38 @@ void print_LinkedList(LinkedList* head) {
     std::cout << std::endl;
 }
 
-LinkedList* setup_question() {
-    
-    // Input the number of elements and position of cycle
-    int n, pos, temp;
-    VERIFY((std::cin >> n >> pos));
+LinkedList* setup_question(int argc, char* argv[]) {
 
-    // Dynamically allocate an array to store the node values
-    int* nodes = new int[n];
+    if (argc == 1) {
+        // Input the number of elements and position
+        int n, pos, temp;
+        VERIFY((std::cin >> n >> pos));
 
-    // Input the values into the array
-    for (int i = 0; i < n; i++) {
-        VERIFY((std::cin >> nodes[i]));
+        // Dynamically allocate an array to store the node values
+        int* nodes = new int[n];
+
+        // Input the values into the array
+        for (int i = 0; i < n; i++) {
+            VERIFY((std::cin >> nodes[i]));
+        }
+        // Check if there are any extra inputs
+        // If there are, then the input is invalid
+        VERIFY((std::cin >> temp).fail() == true);
+
+        // Build the linked list
+        LinkedList* head = buildLinkedList(nodes, n, pos);
+
+        return head;
     }
-    // Check if there are any extra inputs
-    // If there are, then the input is invalid
-    VERIFY((std::cin >> temp).fail() == true);
+    else {
+        int n = std::stoi(argv[1]);
+        int pos = std::stoi(argv[2]);
+        int* nodes = new int[n];
+        for (int i = 0; i < n; i++) {
+            nodes[i] = std::stoi(argv[i + 3]);
+        }
+        LinkedList* head = buildLinkedList(nodes, n, pos);
 
-    // Build the linked list with cycle
-    LinkedList* head = buildLinkedList(nodes, n, pos);
-
-    return head;
+        return head;
+    }
 }
