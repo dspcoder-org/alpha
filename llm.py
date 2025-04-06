@@ -5,10 +5,6 @@ import re
 
 class generate:
     def __init__(self, base_question_path, description_path):
-        self.claude_api_key = "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" #os.environ.get('API_KEY')
-        self.anthropic = Anthropic(api_key=self.claude_api_key )
-        self.gpt_api_key = "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"
-        self.deepseek_api_key = "sk-4d694e3879854ee58a63e54ee3ec8d27"
         self.model_to_use = "gpt"
         self.gpt = OpenAI(api_key = self.gpt_api_key)
         self.deepseek = OpenAI(api_key=self.deepseek_api_key, base_url="https://api.deepseek.com")
