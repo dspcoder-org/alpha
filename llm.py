@@ -3,9 +3,26 @@ from openai import OpenAI
 import os
 import re
 
+# read env.config for api keys
+with open("env.config", "r") as file:
+    lines = file.readlines()
+    for line in lines:    
+        key, value = line.strip().split("=")
+        os.environ[key] = value
+
+
+
 class generate:
     def __init__(self, base_question_path, description_path):
-        
+        self.claude_api_key =  os.environ.get('claude')
+        self.anthropic = Anthropic(api_key=self.claude_api_key )
+        self.gpt_api_key = os.environ.get('gpt')
+        self.deepseek_api_key = os.environ.get('deepseek')
+        self.model_to_use = "gpt"
+        self.gpt = OpenAI(api_key = self.gpt_api_key)
+        self.deepseek = OpenAI(api_key=self.deepseek_api_key, base_url="https://api.deepseek.com")
+        self.code_files_path = base_question_path
+        self.description_path = description_path
         self.system_context = """
             Your task is to modify the provided code files to implement a new algorithm while maintaining the existing structure. The original files were written for a reverse_linked_list algorithm.
 
